@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Hupti — The Expressive Virtual Pet</title>
+  <meta name="description" content="A complete, responsive, and minimalist interactive web application for Hupti, an expressive virtual pet companion.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='9' r='5.2' fill='%23FFA5BA'/><circle cx='22.5' cy='13.5' r='5.2' fill='%23FF83A0'/><circle cx='20' cy='21.5' r='5.2' fill='%23FFA5BA'/><circle cx='12' cy='21.5' r='5.2' fill='%23FF83A0'/><circle cx='9.5' cy='13.5' r='5.2' fill='%23FFA5BA'/><circle cx='16' cy='16' r='4.2' fill='%23FFD166'/><circle cx='14.8' cy='14.8' r='1.3' fill='%23FFFBE6'/></svg>">
+</head>
+<body>
+
+  <!-- Particle Background Canvas for Ambient Motes & Burst Effects -->
+  <canvas id="particleCanvas" class="canvas-particles"></canvas>
+
+  <!-- Main Application Wrapper -->
+  <main class="app-container">
+
+    <!-- Top Header Navigation & Status -->
+    <header class="header-bar">
+      <!-- Brand & Identity -->
+      <div class="brand-wrapper">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="9" r="5.2" fill="#FFA5BA"/>
+            <circle cx="22.5" cy="13.5" r="5.2" fill="#FF83A0"/>
+            <circle cx="20" cy="21.5" r="5.2" fill="#FFA5BA"/>
+            <circle cx="12" cy="21.5" r="5.2" fill="#FF83A0"/>
+            <circle cx="9.5" cy="13.5" r="5.2" fill="#FFA5BA"/>
+            <circle cx="16" cy="16" r="4.2" fill="#FFD166"/>
+            <circle cx="14.8" cy="14.8" r="1.3" fill="#FFFBE6"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Hupti</h1>
+          <p>Your Expressive Companion</p>
+        </div>
+      </div>
+
+      <!-- Center Status Pill & Affection Bar -->
+      <div class="header-center">
+        <div id="moodBadge" class="status-pill mood-idle">
+          <span class="mood-icon">✨</span> Curious & Relaxed
+        </div>
+
+        <div class="affection-pill" title="Affection Level (Increases with pets and treats)">
+          <span class="affection-heart">💖</span>
+          <div class="affection-bar-wrapper">
+            <div id="affectionFill" class="affection-fill"></div>
+          </div>
+          <span id="affectionText">60%</span>
+        </div>
+      </div>
+
+      <!-- Top Right Action Utilities -->
+      <div class="header-actions">
+        <button id="btnThemeToggle" class="icon-btn" aria-label="Toggle Night Mode" title="Toggle Cozy Night Mode">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+
+        <button id="btnMuteToggle" class="icon-btn" aria-label="Toggle Sound" title="Mute/Unmute Sound (M)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+          </svg>
+        </button>
+
+        <button id="btnHelp" class="icon-btn" aria-label="Controls & Shortcuts" title="Shortcuts & Gestures">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Center Stage: Hupti Avatar -->
+    <section class="avatar-stage">
+      <div id="huptiContainer" class="avatar-wrapper">
+        <svg id="huptiAvatar" class="hupti-avatar-svg" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Body Gradient (Light Mode) -->
+            <radialGradient id="huptiBodyGradient" cx="45%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#FFFFFF"/>
+              <stop offset="60%" stop-color="#FFF3F7"/>
+              <stop offset="100%" stop-color="#FFE4EE"/>
+            </radialGradient>
+
+            <!-- Body Gradient (Dark Mode) -->
+            <radialGradient id="huptiBodyDarkGradient" cx="45%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#FAF5FF"/>
+              <stop offset="65%" stop-color="#EADBFF"/>
+              <stop offset="100%" stop-color="#D5BFFF"/>
+            </radialGradient>
+
+            <!-- Soft Blush Glow Gradient -->
+            <radialGradient id="blushRadialGradient" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FF5A82" stop-opacity="0.8"/>
+              <stop offset="50%" stop-color="#FF83A0" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#FFA4BA" stop-opacity="0"/>
+            </radialGradient>
+
+            <!-- Pupil Rich Depth Gradient -->
+            <linearGradient id="pupilGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#2D1F38"/>
+              <stop offset="70%" stop-color="#3F2A52"/>
+              <stop offset="100%" stop-color="#674780"/>
+            </linearGradient>
+
+            <!-- Iris Inner Rim Reflection -->
+            <linearGradient id="irisRimGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#B284D1" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#FF8DA1" stop-opacity="0.4"/>
+            </linearGradient>
+
+            <!-- Soft Outer Glow -->
+            <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#FF8DA1" flood-opacity="0.22"/>
+            </filter>
+          </defs>
+
+          <!-- Hupti Body Silhouette (Soft squishy organic pear/marshmallow) -->
+          <path id="huptiBody" class="hupti-body-path" d="
+            M 110 32
+            C 160 32, 192 70, 194 116
+            C 196 160, 168 198, 110 198
+            C 52 198, 24 160, 26 116
+            C 28 70, 60 32, 110 32
+            Z
+          "/>
+
+          <!-- Cute Pink Flower Blossom Accessory (Exact Matching Theme) -->
+          <g id="headSprout" transform="translate(108, 30)">
+            <path d="M 0 0 C -2 -7, 0 -13, 2 -16" stroke="#70C1B3" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+            <path d="M 0 -7 C -5 -9, -6 -14, -1 -12 Z" fill="#8CE0D0"/>
+            <!-- 5-petal flower blossom matching brand logo -->
+            <g transform="translate(2, -18) scale(0.65)">
+              <circle cx="0" cy="-8" r="5.2" fill="#FFA5BA"/>
+              <circle cx="7.6" cy="-2.5" r="5.2" fill="#FF83A0"/>
+              <circle cx="4.7" cy="6.5" r="5.2" fill="#FFA5BA"/>
+              <circle cx="-4.7" cy="6.5" r="5.2" fill="#FF83A0"/>
+              <circle cx="-7.6" cy="-2.5" r="5.2" fill="#FFA5BA"/>
+              <circle cx="0" cy="0" r="4.2" fill="#FFD166"/>
+              <circle cx="-1.2" cy="-1.2" r="1.3" fill="#FFFBE6"/>
+            </g>
+          </g>
+
+          <!-- Cheeks / Blush Layer -->
+          <g id="blushLayer">
+            <!-- Left Cheek -->
+            <circle id="blushL" class="hupti-blush" cx="50" cy="136" r="14"/>
+            <line class="hupti-blush-mark" x1="43" y1="133" x2="40" y2="139"/>
+            <line class="hupti-blush-mark" x1="49" y1="133" x2="46" y2="139"/>
+            <line class="hupti-blush-mark" x1="55" y1="133" x2="52" y2="139"/>
+
+            <!-- Right Cheek -->
+            <circle id="blushR" class="hupti-blush" cx="170" cy="136" r="14"/>
+            <line class="hupti-blush-mark" x1="165" y1="133" x2="168" y2="139"/>
+            <line class="hupti-blush-mark" x1="171" y1="133" x2="174" y2="139"/>
+            <line class="hupti-blush-mark" x1="177" y1="133" x2="180" y2="139"/>
+          </g>
+
+          <!-- Left Eye Group -->
+          <g id="eyeL" class="hupti-eye-group">
+            <g class="hupti-eye-lid">
+              <!-- Sclera -->
+              <ellipse class="hupti-eye-sclera" cx="74" cy="108" rx="19" ry="24"/>
+              
+              <!-- Pupil with Lerp Mouse Tracking -->
+              <g class="hupti-pupil-group">
+                <ellipse class="hupti-pupil" cx="74" cy="109" rx="14" ry="18"/>
+                <ellipse cx="74" cy="116" rx="9" ry="6" fill="url(#irisRimGradient)"/>
+                <!-- Shiny highlights -->
+                <circle class="hupti-pupil-sparkle" cx="69" cy="99" r="6"/>
+                <circle class="hupti-pupil-sparkle" cx="79" cy="118" r="2.8"/>
+                <circle class="hupti-pupil-sparkle" cx="76" cy="103" r="1.6"/>
+              </g>
+
+              <!-- Eyelashes -->
+              <path class="hupti-lash" d="M 58 98 Q 63 90 73 87"/>
+              <path class="hupti-lash" d="M 82 89 Q 89 87 94 92"/>
+            </g>
+
+            <!-- Happy Crescent Eye (shown when Happy) -->
+            <path class="hupti-happy-eye" d="M 58 114 Q 74 94 90 114" style="opacity: 0;"/>
+            <!-- Sleep Eye Arc (shown when Sleeping) -->
+            <path class="hupti-sleep-eye" d="M 59 110 Q 74 122 89 110" style="opacity: 0;"/>
+            <!-- Sad Tear (shown when Sad) -->
+            <path class="hupti-tear-drop" d="M 57 122 Q 54 129 57 134 Q 61 129 57 122" fill="#89CFF0" style="opacity: 0;"/>
+          </g>
+
+          <!-- Right Eye Group -->
+          <g id="eyeR" class="hupti-eye-group">
+            <g class="hupti-eye-lid">
+              <!-- Sclera -->
+              <ellipse class="hupti-eye-sclera" cx="146" cy="108" rx="19" ry="24"/>
+
+              <!-- Pupil with Lerp Mouse Tracking -->
+              <g class="hupti-pupil-group">
+                <ellipse class="hupti-pupil" cx="146" cy="109" rx="14" ry="18"/>
+                <ellipse cx="146" cy="116" rx="9" ry="6" fill="url(#irisRimGradient)"/>
+                <!-- Shiny highlights -->
+                <circle class="hupti-pupil-sparkle" cx="141" cy="99" r="6"/>
+                <circle class="hupti-pupil-sparkle" cx="151" cy="118" r="2.8"/>
+                <circle class="hupti-pupil-sparkle" cx="148" cy="103" r="1.6"/>
+              </g>
+
+              <!-- Eyelashes -->
+              <path class="hupti-lash" d="M 162 98 Q 157 90 147 87"/>
+              <path class="hupti-lash" d="M 138 89 Q 131 87 126 92"/>
+            </g>
+
+            <!-- Happy Crescent Eye (shown when Happy) -->
+            <path class="hupti-happy-eye" d="M 130 114 Q 146 94 162 114" style="opacity: 0;"/>
+            <!-- Sleep Eye Arc (shown when Sleeping) -->
+            <path class="hupti-sleep-eye" d="M 131 110 Q 146 122 161 110" style="opacity: 0;"/>
+            <!-- Sad Tear (shown when Sad) -->
+            <path class="hupti-tear-drop" d="M 163 122 Q 166 129 163 134 Q 159 129 163 122" fill="#89CFF0" style="opacity: 0;"/>
+          </g>
+
+          <!-- Responsive Animated Mouth -->
+          <g id="mouthGroup">
+            <path id="huptiMouth" class="hupti-mouth-path" d="M 96 142 Q 103 147 110 143 Q 117 147 124 142" fill="none" stroke="#5A3D4A"/>
+            <path id="huptiTongue" class="hupti-mouth-tongue" d="M 103 152 Q 110 160 117 152 Z" style="opacity: 0;"/>
+          </g>
+
+          <!-- Invisible Interactive Hit Zones -->
+          <!-- Forehead zone for gentle petting and purring -->
+          <path id="hitForehead" class="hit-zone forehead" d="M 60 40 C 90 35, 130 35, 160 40 C 160 85, 60 85, 60 40 Z"/>
+          <!-- Left Cheek zone for poking -->
+          <circle id="hitCheekL" class="hit-zone cheek" cx="50" cy="136" r="24"/>
+          <!-- Right Cheek zone for poking -->
+          <circle id="hitCheekR" class="hit-zone cheek" cx="170" cy="136" r="24"/>
+        </svg>
+      </div>
+
+      <!-- Dialogue / Subtitle Box -->
+      <article class="dialogue-card" aria-live="polite">
+        <header class="dialogue-header">
+          <div class="dialogue-speaker">
+            <span class="pulse-dot"></span> Hupti
+          </div>
+          <div class="treat-counter-tag">
+            <span>🍬 Treats Enjoyed:</span>
+            <strong id="treatsCounter">0</strong>
+          </div>
+        </header>
+        <div class="dialogue-content">
+          <p id="dialogueText" class="dialogue-text">Just observing the world... got a moment to hang out?</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- Bottom Controls & Safe Non-Overlapping Feedback Row -->
+    <footer class="bottom-controls-footer">
+      <nav id="controlsContainer" class="controls-wrapper" aria-label="Hupti Action Controls">
+        <!-- 1. Pet Button -->
+        <button id="btnPet" class="action-pill" title="Pet Hupti's forehead (Shortcut: P)">
+          <span class="pill-icon">💖</span>
+          <span class="pill-label">Pet</span>
+          <span class="key-hint">P</span>
+        </button>
+
+        <!-- 2. Poke Button -->
+        <button id="btnPoke" class="action-pill" title="Poke or tease Hupti (Shortcut: T)">
+          <span class="pill-icon">👉</span>
+          <span class="pill-label">Poke</span>
+          <span class="key-hint">T</span>
+        </button>
+
+        <!-- 3. Hug Button -->
+        <button id="btnHug" class="action-pill" title="Hug Hupti (Shortcut: H)">
+          <span class="pill-icon">🤗</span>
+          <span class="pill-label">Hug</span>
+          <span class="key-hint">H</span>
+        </button>
+
+        <!-- 4. Sleep / Wake Button -->
+        <button id="btnSleepWake" class="action-pill" title="Put to sleep or wake up (Shortcut: S or W)">
+          <span id="btnSleepIcon" class="pill-icon">💤</span>
+          <span id="btnSleepLabel" class="pill-label">Sleep</span>
+          <span id="btnSleepKey" class="key-hint">S</span>
+        </button>
+
+        <!-- 5. Scold Button -->
+        <button id="btnScold" class="action-pill" title="Gentle rebuke (Shortcut: R)">
+          <span class="pill-icon">😠</span>
+          <span class="pill-label">Scold</span>
+          <span class="key-hint">R</span>
+        </button>
+
+        <!-- 6. Treat Button -->
+        <button id="btnTreat" class="action-pill" title="Give Hupti a sweet snack (Shortcut: F)">
+          <span class="pill-icon">🍬</span>
+          <span class="pill-label">Treat</span>
+          <span class="key-hint">F</span>
+        </button>
+      </nav>
+
+      <!-- Feedback Pill Positioned with Safe Clearance Below Controls -->
+      <div class="feedback-row">
+        <button id="btnOpenFeedback" class="floating-feedback-pill" title="Share your love & feedback for Hupti">
+          <span class="feedback-icon">💬</span> How much do you like Hupti? Let us know!
+        </button>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Help & Shortcuts Modal -->
+  <div id="helpModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="modalTitle">Interacting with Hupti</h2>
+        <button id="btnCloseModal" class="modal-close" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="help-section">
+          <h3>Keyboard Shortcuts</h3>
+          <div class="shortcut-grid">
+            <div class="shortcut-item">
+              <span>Pet / Stroke</span>
+              <span class="key-hint">P</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Poke / Tease</span>
+              <span class="key-hint">T</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Warm Hug</span>
+              <span class="key-hint">H</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Put to Sleep</span>
+              <span class="key-hint">S</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Wake Up</span>
+              <span class="key-hint">W</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Scold / Rebuke</span>
+              <span class="key-hint">R</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Give Treat</span>
+              <span class="key-hint">F</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Toggle Mute</span>
+              <span class="key-hint">M</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="help-section">
+          <h3>Direct Gestures (Mouse & Touch)</h3>
+          <div class="gesture-list">
+            <div class="gesture-item">
+              <span class="gesture-icon">✨</span>
+              <span><strong>Pupil Tracking:</strong> Hupti's curious eyes follow your cursor as you move around.</span>
+            </div>
+            <div class="gesture-item">
+              <span class="gesture-icon">💖</span>
+              <span><strong>Stroke Forehead:</strong> Click or stroke back and forth across her forehead to make her purr and blush.</span>
+            </div>
+            <div class="gesture-item">
+              <span class="gesture-icon">👉</span>
+              <span><strong>Pinch / Tap Cheeks:</strong> Tap her squishy cheeks to surprise or tease her.</span>
+            </div>
+            <div class="gesture-item">
+              <span class="gesture-icon">💤</span>
+              <span><strong>Wake Gentle Tap:</strong> Tap anywhere on Hupti when she is sleeping to gently wake her.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback & Rating Modal -->
+  <div id="feedbackModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+    <div class="modal-card feedback-card">
+      <div class="modal-header">
+        <h2 id="feedbackTitle">Share your love &amp; feedback for Hupti 🌸</h2>
+        <button id="btnCloseFeedback" class="modal-close" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="feedbackForm" class="feedback-form">
+          <!-- Star Rating -->
+          <div class="feedback-field">
+            <label class="feedback-label">Your Rating:</label>
+            <div class="star-rating" id="starRating" role="radiogroup" aria-label="Star Rating">
+              <span class="star-btn active" data-value="1" title="1 Star - Needs work">★</span>
+              <span class="star-btn active" data-value="2" title="2 Stars - Cute">★</span>
+              <span class="star-btn active" data-value="3" title="3 Stars - Really sweet!">★</span>
+              <span class="star-btn active" data-value="4" title="4 Stars - Love Hupti!">★</span>
+              <span class="star-btn active" data-value="5" title="5 Stars - Absolutely adore Hupti! 💖">★</span>
+            </div>
+            <span id="starRatingLabel" class="star-rating-label">5 Stars — Absolutely adore Hupti! 💖</span>
+            <input type="hidden" id="ratingInput" name="rating" value="5" />
+          </div>
+
+          <!-- User Email -->
+          <div class="feedback-field">
+            <label for="feedbackEmail" class="feedback-label">Your Email Address <span class="required">*</span></label>
+            <input type="email" id="feedbackEmail" name="email" class="feedback-input" required placeholder="your.name@example.com" />
+          </div>
+
+          <!-- Feedback Message -->
+          <div class="feedback-field">
+            <label for="feedbackMessage" class="feedback-label">Tell us how Hupti made you feel... <span class="required">*</span></label>
+            <textarea id="feedbackMessage" name="message" class="feedback-textarea" rows="3" required placeholder="Share your experience, warmth, or suggestions for Hupti..."></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="btnSubmitFeedback" class="feedback-submit-btn">
+            <span id="submitBtnText">Send Feedback 💌</span>
+          </button>
+        </form>
+
+        <!-- Success Confirmation State -->
+        <div id="feedbackSuccessState" class="feedback-success" style="display: none;">
+          <div class="success-icon">💖</div>
+          <h3>Thank you for your feedback!</h3>
+          <p>Hupti is sending you lots of love! 💖</p>
+          <button id="btnFeedbackDone" class="action-pill" style="margin-top: 1.25rem;">Back to Hupti 🌸</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modular Scripts Loaded in Topological Order -->
+  <script src="js/soundfx.js"></script>
+  <script src="js/huptistate.js"></script>
+  <script src="js/huptirenderer.js"></script>
+  <script src="js/inputhandler.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

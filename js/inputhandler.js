@@ -1,0 +1,236 @@
+/**
+ * InputHandler - Manages Keyboard, Mouse, and Touch interactions
+ * Bridges direct avatar contact and control bar triggers to HuptiState & HuptiRenderer.
+ */
+
+class InputHandler {
+  constructor(state, renderer, soundFX) {
+    this.state = state;
+    this.renderer = renderer;
+    this.soundFX = soundFX;
+
+    this.isDragging = false;
+    this.dragDistance = 0;
+    this.lastPointerX = 0;
+    this.lastPointerY = 0;
+    this.dragTargetIsForehead = false;
+
+    this.initKeyboard();
+    this.initButtons();
+    this.initAvatarDirectInteractions();
+    this.initGlobalPointerTracking();
+  }
+
+  /**
+   * Keyboard shortcuts listener
+   */
+  initKeyboard() {
+    window.addEventListener('keydown', (e) => {
+      // Don't trigger if user is in an input or text field
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+      const key = e.key.toUpperCase();
+
+      switch (key) {
+        case 'P':
+          this.flashButton('btnPet');
+          this.state.pet();
+          break;
+
+        case 'T':
+          this.flashButton('btnPoke');
+          this.state.poke();
+          this.renderer.squish(0.9, 1.12);
+          break;
+
+        case 'H':
+          this.flashButton('btnHug');
+          this.state.hug();
+          break;
+
+        case 'S':
+          if (this.state.currentMood !== MOODS.SLEEPING) {
+            this.flashButton('btnSleepWake');
+            this.state.putToSleep();
+          }
+          break;
+
+        case 'W':
+          if (this.state.currentMood === MOODS.SLEEPING) {
+            this.flashButton('btnSleepWake');
+            this.state.wakeUp();
+          } else {
+            // If already awake, gentle wake-up chirp/wave
+            this.flashButton('btnSleepWake');
+            this.state.pet();
+          }
+          break;
+
+        case 'R':
+          this.flashButton('btnScold');
+          this.state.scold();
+          this.renderer.squish(1.04, 0.96);
+          break;
+
+        case 'F':
+          this.flashButton('btnTreat');
+          this.state.giveTreat();
+          break;
+
+        case 'M':
+          // Toggle Mute
+          const muteBtn = document.getElementById('btnMuteToggle');
+          if (muteBtn) muteBtn.click();
+          break;
+      }
+    });
+  }
+
+  /**
+   * Action buttons bindings
+   */
+  initButtons() {
+    const bindBtn = (id, action) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.soundFX.playClick();
+        action();
+      });
+    };
+
+    bindBtn('btnPet', () => this.state.pet());
+    bindBtn('btnPoke', () => {
+      this.state.poke();
+      this.renderer.squish(0.9, 1.12);
+    });
+    bindBtn('btnHug', () => this.state.hug());
+    bindBtn('btnSleepWake', () => {
+      if (this.state.currentMood === MOODS.SLEEPING) {
+        this.state.wakeUp();
+      } else {
+        this.state.putToSleep();
+      }
+    });
+    bindBtn('btnScold', () => {
+      this.state.scold();
+      this.renderer.squish(1.04, 0.96);
+    });
+    bindBtn('btnTreat', () => this.state.giveTreat());
+  }
+
+  /**
+   * Direct avatar click & drag interactions (forehead stroke, cheek poke, body tap)
+   */
+  initAvatarDirectInteractions() {
+    const forehead = document.getElementById('hitForehead');
+    const cheekL = document.getElementById('hitCheekL');
+    const cheekR = document.getElementById('hitCheekR');
+    const avatar = document.getElementById('huptiAvatar');
+
+    // Forehead petting interaction
+    if (forehead) {
+      forehead.addEventListener('pointerdown', (e) => {
+        this.isDragging = true;
+        this.dragTargetIsForehead = true;
+        this.dragDistance = 0;
+        this.lastPointerX = e.clientX;
+        this.lastPointerY = e.clientY;
+      });
+
+      forehead.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.state.pet();
+      });
+    }
+
+    // Cheek poking interaction
+    const handleCheekPoke = (e, side) => {
+      e.stopPropagation();
+      this.state.poke();
+      if (side === 'left') {
+        this.renderer.squish(0.88, 1.12);
+      } else {
+        this.renderer.squish(1.12, 0.88);
+      }
+    };
+
+    if (cheekL) {
+      cheekL.addEventListener('click', (e) => handleCheekPoke(e, 'left'));
+    }
+    if (cheekR) {
+      cheekR.addEventListener('click', (e) => handleCheekPoke(e, 'right'));
+    }
+
+    // Direct click anywhere on avatar
+    if (avatar) {
+      avatar.addEventListener('click', (e) => {
+        if (this.state.currentMood === MOODS.SLEEPING) {
+          this.state.wakeUp();
+        } else {
+          // If clicked in general area, playful pet
+          this.state.pet();
+        }
+      });
+    }
+
+    // Pointer move for petting stroke detection
+    window.addEventListener('pointermove', (e) => {
+      if (!this.isDragging) return;
+
+      const dist = Math.hypot(e.clientX - this.lastPointerX, e.clientY - this.lastPointerY);
+      this.dragDistance += dist;
+      this.lastPointerX = e.clientX;
+      this.lastPointerY = e.clientY;
+
+      if (this.dragTargetIsForehead && this.dragDistance > 30) {
+        this.state.continuousPet();
+        this.renderer.spawnHeartsBurst(1);
+        this.dragDistance = 0;
+      }
+    });
+
+    window.addEventListener('pointerup', () => {
+      this.isDragging = false;
+      this.dragTargetIsForehead = false;
+      this.dragDistance = 0;
+    });
+
+    window.addEventListener('pointercancel', () => {
+      this.isDragging = false;
+      this.dragTargetIsForehead = false;
+    });
+  }
+
+  /**
+   * Pointer tracking across viewport to make Hupti's eyes follow the cursor
+   */
+  initGlobalPointerTracking() {
+    window.addEventListener('pointermove', (e) => {
+      this.renderer.updatePointerTarget(e.clientX, e.clientY);
+    });
+
+    // Touch device support
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches.length > 0) {
+        this.renderer.updatePointerTarget(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+  }
+
+  /**
+   * Visual button ripple / active state when triggered by keyboard
+   */
+  flashButton(btnId) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    btn.classList.add('keyboard-active');
+    setTimeout(() => {
+      btn.classList.remove('keyboard-active');
+    }, 200);
+  }
+}
+
+// Expose globally
+window.InputHandler = InputHandler;
