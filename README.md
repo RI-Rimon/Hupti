@@ -1,11 +1,4 @@
-# 🌸 Hupti (হুপ্তি) — The Expressive Virtual Pet Companion
-
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-hupti.vercel.app-ff6584?style=for-the-badge&logo=vercel&logoColor=white)](https://hupti.vercel.app/)
-[![GitHub Repo](https://img.shields.io/badge/GitHub-RI--Rimon%2FHupti-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/RI-Rimon/Hupti)
-[![Vanilla JS](https://img.shields.io/badge/JavaScript-Vanilla%20ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![Web Audio API](https://img.shields.io/badge/Audio-Procedural%20Web%20Audio-7952B3?style=for-the-badge&logo=web-audio-api&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
-[![Document PiP](https://img.shields.io/badge/Window-Document%20PiP-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/web-platform/document-picture-in-picture/)
-[![Zero Dependencies](https://img.shields.io/badge/Dependencies-0%20External%20Libs-success?style=for-the-badge)](https://github.com/RI-Rimon/Hupti)
+# 🌸 Hupti — The Expressive Virtual Pet Companion
 
 > A minimalist, responsive, and heartwarming virtual companion that lives directly in your browser or floats over your desktop work. Crafted with fluid vector animations, procedural acoustic pet vocalizations, and zero external framework bloat.
 
@@ -22,7 +15,6 @@
 - [How Hupti Works (Architecture)](#-how-hupti-works-architecture)
 - [Key Features](#-key-features)
 - [Interactive Controls & Shortcuts](#-interactive-controls--shortcuts)
-- [Technical Stack & Design Decisions](#-technical-stack--design-decisions)
 - [Quick Start & Local Setup](#-quick-start--local-setup)
 - [Future Roadmap & Ideas](#-future-roadmap--ideas)
 - [Credits & Acknowledgments](#-credits--acknowledgments)
@@ -31,16 +23,14 @@
 
 ## 📖 The Story Behind Hupti
 
-Hupti began during a late-night exam preparation session when studying for long hours started to feel overwhelming, isolating, and monotonous. 
+Hupti began during a late-night exam preparation session when studying for long hours started to feel overwhelming and monotonous.
 
-Staring at walls of technical documentation and lecture slides, the idea was born: **what if there was a gentle, quiet presence on the screen—a small digital friend who doesn't demand high-maintenance gaming loops, but simply responds warmly to gentle affection, sits quietly beside your workflow, and occasionally surprises you with a comforting thought?**
+The idea was to create a small companion that could sit quietly on the screen, respond to a little affection, and occasionally offer a comforting thought.
 
-The character's identity, visual aesthetic, emotional lifecycle, and system architecture were deliberately planned to evoke tranquility:
-- **No realistic animal stereotypes:** Hupti is not strictly a cat, bird, or dog. She is an abstract, squishy, kawaii essence of warmth.
-- **Thoughtful Interaction Design:** Soft pastel gradients, fluid SVG eyes that track your cursor, subtle breathing pulses, and blushing cheeks.
-- **Ethical & Relaxing Audio:** No loud, jarring chimes or robotic text-to-speech voices reading text aloud. Her thoughts appear silently in written form, accompanied only by warm, organic procedural acoustic purrs and coos.
+The concept, character identity, visual direction, emotional lifecycle, and overall architecture were planned as part of the project. AI-assisted coding tools, including Anti Gravity, helped with implementation and iterative refinement.
 
-Implementation and iterative refinement were developed with the assistance of **Anti Gravity** (Google DeepMind's advanced agentic coding environment). Hupti stands as a personal exploration in blending frontend craft, dynamic SVG vector animation, procedural browser acoustics, and human-centered emotional design into a delightful micro-experience.
+Hupti represents a personal experiment in combining frontend development, animation, browser audio, and thoughtful interaction design into a small but meaningful experience.
+
 
 ---
 
@@ -48,7 +38,7 @@ Implementation and iterative refinement were developed with the assistance of **
 
 | Attribute | Specification |
 | :--- | :--- |
-| **Name** | **Hupti** (pronounced *Hup-tee*) |
+| **Name** | **Hupti** (pronounced *Hup-tea*) |
 | **Persona** | Affectionate, slightly playful, empathetic, and sweet. |
 | **Visual Motif** | A 5-petal pink blossom with a golden pollen core—symbolizing fresh energy, soft resilience, and blooming warmth. |
 | **Aesthetic** | Soft pastel minimalism (gentle strawberry blush, cream whites, lavender night shadows). |
@@ -193,29 +183,12 @@ Hupti is engineered from the ground up without heavy external dependencies or ru
 
 ---
 
-## 💻 Quick Start & Local Setup
+## 💻 Quick Start
 
 ### 🌐 Instant Web Access
 No installation required! Visit the live deployment:
 👉 **[https://hupti.vercel.app/](https://hupti.vercel.app/)**
 
-### 💻 Running Locally
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/RI-Rimon/Hupti.git
-   cd Hupti
-   ```
-
-2. **Launch with Node.js built-in server:**
-   ```bash
-   node server.js
-   ```
-   Open your browser to [**http://localhost:8080**](http://localhost:8080).
-
-3. *Alternatively*, open [`index.html`](file:///c:/Users/redwa/OneDrive/Desktop/Test%20for%20antigravity/Vertual%20Pet/index.html) directly in any modern browser (Chrome 116+ recommended for full Document PiP support).
-
----
 
 ## 🔮 Future Roadmap & Ideas
 
@@ -240,7 +213,7 @@ Hupti is an evolving project. Below are planned features and conceptual directio
 
 ## 👤 Credits & Acknowledgments
 
-- **Concept, Design & Architecture:** Redwan Rimon ([@RI-Rimon](https://github.com/RI-Rimon))
+- **Concept, Design & Architecture:** Redwanul Islam Rimon ([@RI-Rimon](https://github.com/RI-Rimon))
 - **AI-Assisted Pair Programming:** Built and polished with **Anti Gravity** (Google DeepMind)
 - **Deployment Platform:** [Vercel](https://vercel.com/)
 - **License:** Open Source under the [MIT License](LICENSE)
