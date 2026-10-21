@@ -44,7 +44,17 @@ A complete, responsive, and minimalist interactive web application for an expres
   - *"You're doing amazing, even if things feel tough. I'm right here!"*
   - *"Just sitting here appreciating how kind you are to me."*
 
-### 6. Bottom Feedback & Rating Modal (Privacy-Focused)
+### 6. Picture-in-Picture (Always-on-Top Floating Mini Companion)
+- **Floating Window Mode:** Seamlessly pop Hupti into a compact, always-on-top mini window using the browser's native **Document Picture-in-Picture API** (with automatic canvas video PiP fallback).
+- **Desktop Companion:** Hupti floats over any desktop application, IDE, spreadsheet, video call, or other browser tab.
+- **Interactive in Mini View:**
+  - Dynamic vector avatar with live pupil tracking and mood expressions.
+  - Live written subtitle thoughts card.
+  - Interactive quick buttons (💖 Pet, 🤗 Hug, 💤 Sleep/Wake, 🍬 Treat).
+  - Tap her face directly in the mini window to pet and trigger floating heart bursts!
+- **Auto-Switch & Dock:** Automatically surfaces when switching away from the tab or via the navbar PiP button (`O` key shortcut).
+
+### 7. Bottom Feedback & Rating Modal (Privacy-Focused)
 - Floating pill button docked cleanly below the action buttons:
   > **💬 How much do you like Hupti? Let us know!**
 - Interactive 1 to 5 Star Rating and feedback textarea.
@@ -63,6 +73,7 @@ A complete, responsive, and minimalist interactive web application for an expres
 | **☀️ Wake Up** | `W` | Click the Wake button or gently tap Hupti |
 | **😠 Scold / Rebuke** | `R` | Click the Scold pill button |
 | **🍬 Give Treat** | `F` | Click the Treat pill button (drops a strawberry snack!) |
+| **⤢ Floating Mini Window (PiP)** | `O` | Click the PiP icon in the top header |
 | **🔇 Toggle Mute** | `M` | Click the speaker icon in the top header |
 | **🌙 Toggle Day/Night** | — | Click the sun/moon icon in the top header |
 | **💬 Give Feedback** | — | Click the feedback button at the bottom |
@@ -71,5 +82,6 @@ A complete, responsive, and minimalist interactive web application for an expres
 
 ## 💻 How to View & Run
 
+- 🌐 **Live Deployed App:** [**https://hupti.vercel.app/**](https://hupti.vercel.app/)
 - 🌐 **Live Web Server Link:** [**http://localhost:8080**](http://localhost:8080)
 - 📁 **Direct Local File Link:** [**index.html**](file:///c:/Users/redwa/OneDrive/Desktop/Test%20for%20antigravity/Vertual%20Pet/index.html)

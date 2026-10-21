@@ -68,6 +68,14 @@
           </svg>
         </button>
 
+        <button id="btnPiPToggle" class="icon-btn" aria-label="Pop out floating Hupti" title="Pop out floating Hupti (PiP)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <rect x="11" y="9" width="9" height="6" rx="1"/>
+            <polyline points="14 9 14 11 16 11"/>
+          </svg>
+        </button>
+
         <button id="btnHelp" class="icon-btn" aria-label="Controls & Shortcuts" title="Shortcuts & Gestures">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
@@ -354,12 +362,20 @@
               <span>Toggle Mute</span>
               <span class="key-hint">M</span>
             </div>
+            <div class="shortcut-item">
+              <span>Floating Mini Window</span>
+              <span class="key-hint">O / PiP</span>
+            </div>
           </div>
         </div>
 
         <div class="help-section">
           <h3>Direct Gestures (Mouse & Touch)</h3>
           <div class="gesture-list">
+            <div class="gesture-item">
+              <span class="gesture-icon">⤢</span>
+              <span><strong>Floating Companion:</strong> Click the PiP icon in the header to float Hupti over other tabs and desktop apps!</span>
+            </div>
             <div class="gesture-item">
               <span class="gesture-icon">✨</span>
               <span><strong>Pupil Tracking:</strong> Hupti's curious eyes follow your cursor as you move around.</span>
@@ -439,6 +455,7 @@
   <script src="js/huptistate.js"></script>
   <script src="js/huptirenderer.js"></script>
   <script src="js/inputhandler.js"></script>
+  <script src="js/pipmanager.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

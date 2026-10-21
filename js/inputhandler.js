@@ -4,10 +4,11 @@
  */
 
 class InputHandler {
-  constructor(state, renderer, soundFX) {
+  constructor(state, renderer, soundFX, pipManager = null) {
     this.state = state;
     this.renderer = renderer;
     this.soundFX = soundFX;
+    this.pipManager = pipManager;
 
     this.isDragging = false;
     this.dragDistance = 0;
@@ -81,6 +82,14 @@ class InputHandler {
           // Toggle Mute
           const muteBtn = document.getElementById('btnMuteToggle');
           if (muteBtn) muteBtn.click();
+          break;
+
+        case 'O':
+          // Toggle Floating Mini Window (PiP)
+          if (this.pipManager) {
+            this.soundFX.playClick();
+            this.pipManager.toggle();
+          }
           break;
       }
     });

@@ -281,6 +281,58 @@ body {
   transform: translateY(0) scale(0.96);
 }
 
+.icon-btn.pip-active {
+  background: var(--btn-hover-bg);
+  color: var(--accent-pink);
+  border-color: rgba(255, 101, 132, 0.6);
+  box-shadow: 0 0 14px var(--accent-pink-glow);
+  animation: pulse-gentle 2.2s infinite ease-in-out;
+}
+
+.pip-floating-badge {
+  position: absolute;
+  top: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--btn-border);
+  border-radius: 9999px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-main);
+  box-shadow: 0 6px 20px -4px rgba(255, 101, 132, 0.25);
+  animation: fadeInDown 0.35s ease;
+  z-index: 20;
+}
+
+.pip-dock-pill {
+  background: linear-gradient(135deg, #FF7B99, #FF527B);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.28rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(255, 101, 132, 0.35);
+  transition: all 0.2s ease;
+}
+
+.pip-dock-pill:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(255, 101, 132, 0.45);
+}
+
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 /* ==========================================================================
    Center Stage: Hupti Avatar
    ========================================================================== */
