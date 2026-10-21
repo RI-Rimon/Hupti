@@ -9,6 +9,10 @@
 
 > A minimalist, responsive, and heartwarming virtual companion that lives directly in your browser or floats over your desktop work. Crafted with fluid vector animations, procedural acoustic pet vocalizations, and zero external framework bloat.
 
+<p align="center">
+  <img src="assets/hupti-preview.png" alt="Hupti Interface Preview" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);" />
+</p>
+
 ---
 
 ## 📑 Table of Contents
