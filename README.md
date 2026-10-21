@@ -1,12 +1,5 @@
 # 🌸 Hupti — The Expressive Virtual Pet Companion
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-hupti.vercel.app-ff6584?style=for-the-badge&logo=vercel&logoColor=white)](https://hupti.vercel.app/)
-[![GitHub Repo](https://img.shields.io/badge/GitHub-RI--Rimon%2FHupti-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/RI-Rimon/Hupti)
-[![Vanilla JS](https://img.shields.io/badge/JavaScript-Vanilla%20ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![Web Audio API](https://img.shields.io/badge/Audio-Procedural%20Web%20Audio-7952B3?style=for-the-badge&logo=web-audio-api&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
-[![Document PiP](https://img.shields.io/badge/Window-Document%20PiP-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/web-platform/document-picture-in-picture/)
-[![Zero Dependencies](https://img.shields.io/badge/Dependencies-0%20External%20Libs-success?style=for-the-badge)](https://github.com/RI-Rimon/Hupti)
-
 > A minimalist, responsive, and heartwarming virtual companion that lives directly in your browser or floats over your desktop work. Crafted with fluid vector animations, procedural acoustic pet vocalizations, study companion tools, and zero external framework bloat.
 
 <p align="center">
@@ -22,7 +15,6 @@
 - [How Hupti Works (Architecture)](#-how-hupti-works-architecture)
 - [Key Features](#-key-features)
 - [Interactive Controls & Shortcuts](#-interactive-controls--shortcuts)
-- [Technical Stack & Design Decisions](#-technical-stack--design-decisions)
 - [Quick Start & Local Setup](#-quick-start--local-setup)
 - [Future Roadmap & Ideas](#-future-roadmap--ideas)
 - [Credits & Acknowledgments](#-credits--acknowledgments)
@@ -45,7 +37,7 @@ Hupti represents a personal experiment in combining frontend development, animat
 
 | Attribute | Specification |
 | :--- | :--- |
-| **Name** | **Hupti** (pronounced *Hup-tee*) |
+| **Name** | **Hupti** (pronounced *Hup-tea*) |
 | **Persona** | Affectionate, slightly playful, empathetic, and sweet companion. |
 | **Visual Motif** | A 5-petal pink blossom with a golden pollen core—symbolizing fresh energy, soft resilience, and blooming warmth. |
 | **Aesthetic** | Soft pastel minimalism (gentle strawberry blush, cream whites, lavender night shadows). |
@@ -222,27 +214,11 @@ Hupti is engineered from the ground up without heavy external dependencies or ru
 
 ---
 
-## 💻 Quick Start & Local Setup
+## 💻 Quick Start
 
 ### 🌐 Instant Web Access
 No installation required! Visit the live deployment:
 👉 **[https://hupti.vercel.app/](https://hupti.vercel.app/)**
-
-### 💻 Running Locally
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/RI-Rimon/Hupti.git
-   cd Hupti
-   ```
-
-2. **Launch with Node.js built-in server:**
-   ```bash
-   node server.js
-   ```
-   Open your browser to [**http://localhost:8080**](http://localhost:8080).
-
-3. *Alternatively*, open [`index.html`](file:///c:/Users/redwa/OneDrive/Desktop/Test%20for%20antigravity/Vertual%20Pet/index.html) directly in any modern browser (Chrome 116+ recommended for full Document PiP support).
 
 ---
 
@@ -252,8 +228,6 @@ Hupti is an evolving project. Below are future conceptual directions under explo
 
 - [ ] **📱 Progressive Web App (PWA) Offline Support:**
   - Web App Manifest and Service Worker caching so Hupti can be installed directly onto Windows/macOS/iOS/Android and run 100% offline.
-- [ ] **🎮 Cozy Micro-Interactions:**
-  - A mini bouncing ball of yarn or floating bubble that Hupti's pupils track and interact with when clicked.
 - [ ] **📊 Empathy Journal:**
   - A gentle, private weekly log visualizing how many hugs, treats, and study hours you and Hupti shared together.
 - [ ] **🌿 Soundscape Sleep Timer:**
