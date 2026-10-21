@@ -128,6 +128,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pipManager && pipManager.isActive()) {
       pipManager.syncPiPState(state);
     }
+
+    // G. Sync Customization (Accessory, Glasses, Tint)
+    if (state.customization) {
+      huptiRenderer.applyAccessory(state.customization.accessory);
+      huptiRenderer.setGlasses(state.customization.glasses);
+      huptiRenderer.applyTint(state.customization.tint);
+      syncWardrobeUI(state.customization);
+    }
+
+    // H. Sync Pomodoro Study Companion
+    if (state.pomodoro) {
+      updatePomodoroUI(state.pomodoro);
+    }
   });
 
   // 6. Audio mute toggle button
@@ -339,4 +352,290 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 500);
     });
   }
+
+  // =========================================================================
+  // 10. Pomodoro Study Companion Manager
+  // =========================================================================
+  const pomodoroModal = document.getElementById('pomodoroModal');
+  const btnPomodoroToggle = document.getElementById('btnPomodoroToggle');
+  const btnClosePomodoro = document.getElementById('btnClosePomodoro');
+  const pomodoroPill = document.getElementById('pomodoroPill');
+  const pomodoroPillTime = document.getElementById('pomodoroPillTime');
+  const pomodoroPillMode = document.getElementById('pomodoroPillMode');
+  const pomoMinutes = document.getElementById('pomoMinutes');
+  const pomoSeconds = document.getElementById('pomoSeconds');
+  const pomodoroStatusLabel = document.getElementById('pomodoroStatusLabel');
+  const btnPomoStartPause = document.getElementById('btnPomoStartPause');
+  const pomoStartIcon = document.getElementById('pomoStartIcon');
+  const pomoStartText = document.getElementById('pomoStartText');
+  const btnPomoReset = document.getElementById('btnPomoReset');
+  const btnPomoSkip = document.getElementById('btnPomoSkip');
+  const btnModeFocus = document.getElementById('btnModeFocus');
+  const btnModeBreak = document.getElementById('btnModeBreak');
+  const pomoCompletedCount = document.getElementById('pomoCompletedCount');
+  const checkPomoTest = document.getElementById('checkPomoTest');
+
+  const updatePomodoroUI = (pomodoro) => {
+    const mins = Math.floor(pomodoro.timeLeft / 60);
+    const secs = pomodoro.timeLeft % 60;
+    const minsStr = String(mins).padStart(2, '0');
+    const secsStr = String(secs).padStart(2, '0');
+    const timeStr = `${minsStr}:${secsStr}`;
+
+    if (pomoMinutes) pomoMinutes.textContent = minsStr;
+    if (pomoSeconds) pomoSeconds.textContent = secsStr;
+
+    // Header Pill
+    if (pomodoroPill) {
+      pomodoroPill.style.display = pomodoro.isActive ? 'inline-flex' : 'none';
+    }
+    if (pomodoroPillTime) pomodoroPillTime.textContent = timeStr;
+    if (pomodoroPillMode) pomodoroPillMode.textContent = pomodoro.mode === 'focus' ? 'Focus' : 'Break';
+
+    // Tabs
+    if (btnModeFocus) btnModeFocus.classList.toggle('active', pomodoro.mode === 'focus');
+    if (btnModeBreak) btnModeBreak.classList.toggle('active', pomodoro.mode === 'break');
+
+    // Start/Pause Button
+    if (pomoStartIcon && pomoStartText) {
+      if (pomodoro.isRunning) {
+        pomoStartIcon.textContent = '⏸️';
+        pomoStartText.textContent = 'Pause';
+      } else {
+        pomoStartIcon.textContent = '▶️';
+        pomoStartText.textContent = pomodoro.mode === 'focus' ? 'Start Focus' : 'Start Break';
+      }
+    }
+
+    // Status message
+    if (pomodoroStatusLabel) {
+      if (pomodoro.isRunning) {
+        pomodoroStatusLabel.textContent = pomodoro.mode === 'focus'
+          ? 'Studying together! Full focus mode 💡'
+          : 'Rest break! Drink water, stretch, and relax ☕';
+      } else {
+        pomodoroStatusLabel.textContent = 'Ready for your next study sprint!';
+      }
+    }
+
+    // Sessions count
+    if (pomoCompletedCount) {
+      pomoCompletedCount.textContent = `⭐️ ${pomodoro.sessionsCompleted}`;
+    }
+
+    // Test mode checkbox
+    if (checkPomoTest) {
+      checkPomoTest.checked = !!pomodoro.testMode;
+    }
+  };
+
+  const openPomodoro = () => {
+    if (pomodoroModal) pomodoroModal.classList.add('active');
+  };
+  const closePomodoro = () => {
+    if (pomodoroModal) pomodoroModal.classList.remove('active');
+  };
+
+  if (btnPomodoroToggle) btnPomodoroToggle.addEventListener('click', openPomodoro);
+  if (pomodoroPill) pomodoroPill.addEventListener('click', openPomodoro);
+  if (btnClosePomodoro) btnClosePomodoro.addEventListener('click', closePomodoro);
+  if (pomodoroModal) {
+    pomodoroModal.addEventListener('click', (e) => {
+      if (e.target === pomodoroModal) closePomodoro();
+    });
+  }
+
+  if (btnPomoStartPause) {
+    btnPomoStartPause.addEventListener('click', () => {
+      soundFX.playClick();
+      const snap = huptiState.getStateSnapshot();
+      if (snap.pomodoro.isRunning) {
+        huptiState.pausePomodoro();
+      } else {
+        huptiState.startPomodoro();
+      }
+    });
+  }
+
+  if (btnPomoReset) {
+    btnPomoReset.addEventListener('click', () => {
+      soundFX.playClick();
+      huptiState.resetPomodoro();
+    });
+  }
+
+  if (btnPomoSkip) {
+    btnPomoSkip.addEventListener('click', () => {
+      soundFX.playClick();
+      huptiState.skipPomodoro();
+    });
+  }
+
+  if (btnModeFocus) {
+    btnModeFocus.addEventListener('click', () => {
+      soundFX.playClick();
+      huptiState.resetPomodoro();
+    });
+  }
+
+  if (btnModeBreak) {
+    btnModeBreak.addEventListener('click', () => {
+      soundFX.playClick();
+      huptiState.skipPomodoro();
+    });
+  }
+
+  if (checkPomoTest) {
+    checkPomoTest.addEventListener('change', () => {
+      soundFX.playClick();
+      huptiState.togglePomodoroTestMode();
+    });
+  }
+
+  // =========================================================================
+  // 11. Ambient Lo-Fi & Rain Soundscapes Manager
+  // =========================================================================
+  const ambientModal = document.getElementById('ambientModal');
+  const btnAmbientToggle = document.getElementById('btnAmbientToggle');
+  const btnCloseAmbient = document.getElementById('btnCloseAmbient');
+  const ambientOptions = document.querySelectorAll('.ambient-option');
+  const ambientVolumeSlider = document.getElementById('ambientVolumeSlider');
+  const ambientVolumeLabel = document.getElementById('ambientVolumeLabel');
+  const btnAmbientTogglePlay = document.getElementById('btnAmbientTogglePlay');
+  const ambientPlayIcon = document.getElementById('ambientPlayIcon');
+  const ambientPlayText = document.getElementById('ambientPlayText');
+
+  let selectedAmbientType = 'rain';
+
+  const updateAmbientPlayBtnUI = () => {
+    const isPlaying = soundFX.isAmbientPlaying();
+    if (btnAmbientTogglePlay) {
+      btnAmbientTogglePlay.classList.toggle('playing', isPlaying);
+    }
+    if (ambientPlayIcon) {
+      ambientPlayIcon.textContent = isPlaying ? '⏹️' : '▶️';
+    }
+    if (ambientPlayText) {
+      ambientPlayText.textContent = isPlaying ? 'Stop Soundscape' : 'Play Soundscape';
+    }
+    if (btnAmbientToggle) {
+      btnAmbientToggle.classList.toggle('pip-active', isPlaying);
+    }
+  };
+
+  const openAmbient = () => {
+    if (ambientModal) ambientModal.classList.add('active');
+  };
+  const closeAmbient = () => {
+    if (ambientModal) ambientModal.classList.remove('active');
+  };
+
+  if (btnAmbientToggle) btnAmbientToggle.addEventListener('click', openAmbient);
+  if (btnCloseAmbient) btnCloseAmbient.addEventListener('click', closeAmbient);
+  if (ambientModal) {
+    ambientModal.addEventListener('click', (e) => {
+      if (e.target === ambientModal) closeAmbient();
+    });
+  }
+
+  ambientOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      ambientOptions.forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      selectedAmbientType = opt.getAttribute('data-ambient');
+      soundFX.playClick();
+
+      // If already playing, immediately switch to the selected soundscape
+      if (soundFX.isAmbientPlaying()) {
+        soundFX.startAmbient(selectedAmbientType);
+        updateAmbientPlayBtnUI();
+      }
+    });
+  });
+
+  if (ambientVolumeSlider) {
+    ambientVolumeSlider.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10);
+      soundFX.setAmbientVolume(val / 100);
+      if (ambientVolumeLabel) ambientVolumeLabel.textContent = `${val}%`;
+    });
+  }
+
+  if (btnAmbientTogglePlay) {
+    btnAmbientTogglePlay.addEventListener('click', () => {
+      soundFX.playClick();
+      if (soundFX.isAmbientPlaying()) {
+        soundFX.stopAmbient();
+      } else {
+        soundFX.startAmbient(selectedAmbientType);
+      }
+      updateAmbientPlayBtnUI();
+    });
+  }
+
+  // =========================================================================
+  // 12. Wardrobe & Custom Themes Manager
+  // =========================================================================
+  const wardrobeModal = document.getElementById('wardrobeModal');
+  const btnWardrobeToggle = document.getElementById('btnWardrobeToggle');
+  const btnCloseWardrobe = document.getElementById('btnCloseWardrobe');
+  const wardrobeItems = document.querySelectorAll('.wardrobe-item');
+  const checkWardrobeGlasses = document.getElementById('checkWardrobeGlasses');
+  const tintSwatches = document.querySelectorAll('.tint-swatch');
+
+  const syncWardrobeUI = (customization) => {
+    if (!customization) return;
+
+    // Sync active accessory item
+    wardrobeItems.forEach(item => {
+      const acc = item.getAttribute('data-accessory');
+      item.classList.toggle('active', acc === customization.accessory);
+    });
+
+    // Sync glasses checkbox
+    if (checkWardrobeGlasses) {
+      checkWardrobeGlasses.checked = !!customization.glasses;
+    }
+
+    // Sync active tint swatch
+    tintSwatches.forEach(swatch => {
+      const tint = swatch.getAttribute('data-tint');
+      swatch.classList.toggle('active', tint === customization.tint);
+    });
+  };
+
+  const openWardrobe = () => {
+    if (wardrobeModal) wardrobeModal.classList.add('active');
+  };
+  const closeWardrobe = () => {
+    if (wardrobeModal) wardrobeModal.classList.remove('active');
+  };
+
+  if (btnWardrobeToggle) btnWardrobeToggle.addEventListener('click', openWardrobe);
+  if (btnCloseWardrobe) btnCloseWardrobe.addEventListener('click', closeWardrobe);
+  if (wardrobeModal) {
+    wardrobeModal.addEventListener('click', (e) => {
+      if (e.target === wardrobeModal) closeWardrobe();
+    });
+  }
+
+  wardrobeItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const acc = item.getAttribute('data-accessory');
+      huptiState.setAccessory(acc);
+    });
+  });
+
+  if (checkWardrobeGlasses) {
+    checkWardrobeGlasses.addEventListener('change', (e) => {
+      huptiState.toggleGlasses(e.target.checked);
+    });
+  }
+
+  tintSwatches.forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      const tint = swatch.getAttribute('data-tint');
+      huptiState.setTint(tint);
+    });
+  });
 });

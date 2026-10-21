@@ -91,6 +91,18 @@ class InputHandler {
             this.pipManager.toggle();
           }
           break;
+
+        case 'B':
+          // Toggle Ambient Soundscapes
+          const btnAmbient = document.getElementById('btnAmbientToggle');
+          if (btnAmbient) btnAmbient.click();
+          break;
+
+        case 'C':
+          // Toggle Wardrobe & Custom Themes
+          const btnWardrobe = document.getElementById('btnWardrobeToggle');
+          if (btnWardrobe) btnWardrobe.click();
+          break;
       }
     });
   }

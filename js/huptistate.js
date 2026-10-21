@@ -30,6 +30,25 @@ class HuptiState {
     this.nextIdleChatterDelay = Math.random() * 8000 + 12000; // 12 - 20 seconds
     this.subscribers = [];
 
+    // Customization & Wardrobe State
+    this.customization = {
+      accessory: 'sakura', // 'sakura' | 'sunflower' | 'snowdrop' | 'sprout' | 'gradcap' | 'ribbon'
+      glasses: false,
+      tint: 'strawberry'   // 'strawberry' | 'lavender' | 'sage' | 'peach' | 'sky'
+    };
+
+    // Pomodoro Study Companion State
+    this.pomodoro = {
+      isActive: false,
+      isRunning: false,
+      mode: 'focus', // 'focus' (25m) | 'break' (5m)
+      timeLeft: 25 * 60,
+      totalDuration: 25 * 60,
+      sessionsCompleted: 0,
+      testMode: false
+    };
+    this.pomodoroInterval = null;
+
     // Load persisted progress from localStorage
     this.loadState();
 
@@ -148,7 +167,9 @@ class HuptiState {
       dialogue: this.currentDialogue,
       affection: this.affection,
       treatCount: this.treatCount,
-      isSleeping: this.currentMood === MOODS.SLEEPING
+      isSleeping: this.currentMood === MOODS.SLEEPING,
+      customization: { ...this.customization },
+      pomodoro: { ...this.pomodoro }
     };
   }
 
@@ -167,6 +188,14 @@ class HuptiState {
           if (typeof data.affection === 'number' && !isNaN(data.affection)) {
             this.affection = Math.min(100, Math.max(10, data.affection));
           }
+          if (data.customization && typeof data.customization === 'object') {
+            if (data.customization.accessory) this.customization.accessory = data.customization.accessory;
+            if (typeof data.customization.glasses === 'boolean') this.customization.glasses = data.customization.glasses;
+            if (data.customization.tint) this.customization.tint = data.customization.tint;
+          }
+          if (typeof data.pomodoroSessionsCompleted === 'number') {
+            this.pomodoro.sessionsCompleted = data.pomodoroSessionsCompleted;
+          }
         }
       }
     } catch (e) {
@@ -183,6 +212,8 @@ class HuptiState {
         const data = {
           treatCount: this.treatCount,
           affection: this.affection,
+          customization: this.customization,
+          pomodoroSessionsCompleted: this.pomodoro.sessionsCompleted,
           lastSaved: Date.now()
         };
         window.localStorage.setItem('hupti_virtual_pet_save', JSON.stringify(data));
@@ -412,6 +443,170 @@ class HuptiState {
         this.setMood(MOODS.HAPPY, 4000);
       }
     }, 2600);
+  }
+
+  // =========================================================================
+  // Customization & Wardrobe Handlers
+  // =========================================================================
+
+  setAccessory(accessoryId) {
+    this.customization.accessory = accessoryId;
+    this.saveState();
+    this.soundFX.playClick();
+    this.setMood(MOODS.HAPPY, 3500, `Hehe, how do I look with my new ${accessoryId} accessory? 🌸`);
+    this.notify();
+  }
+
+  setTint(tintId) {
+    this.customization.tint = tintId;
+    this.saveState();
+    this.soundFX.playClick();
+    this.notify();
+  }
+
+  toggleGlasses(forceVal = null) {
+    if (typeof forceVal === 'boolean') {
+      this.customization.glasses = forceVal;
+    } else {
+      this.customization.glasses = !this.customization.glasses;
+    }
+    this.saveState();
+    this.soundFX.playClick();
+    if (this.customization.glasses) {
+      this.setMood(MOODS.HAPPY, 3000, "Look at my tiny study glasses! Ready for some serious focus 🤓✨");
+    }
+    this.notify();
+  }
+
+  // =========================================================================
+  // Pomodoro Study Companion Engine (25m Focus / 5m Break)
+  // =========================================================================
+
+  startPomodoro() {
+    if (this.currentMood === MOODS.SLEEPING) {
+      this.wakeUp("Waking up! Time to get into study focus mode!");
+    }
+
+    this.pomodoro.isActive = true;
+    this.pomodoro.isRunning = true;
+
+    // Automatically put on study glasses when focusing
+    if (this.pomodoro.mode === 'focus') {
+      this.customization.glasses = true;
+    }
+
+    if (this.pomodoroInterval) clearInterval(this.pomodoroInterval);
+    this.pomodoroInterval = setInterval(() => this._onPomodoroTick(), 1000);
+
+    const focusLines = [
+      "Focus time started! Let's conquer this together. I'm right here studying beside you!",
+      "Study mode activated! 💡 Let's give our full attention for the next interval.",
+      "Timer running! Deep breath in... you're capable of incredible things!"
+    ];
+    const line = focusLines[Math.floor(Math.random() * focusLines.length)];
+    this.setMood(MOODS.HAPPY, 4500, line);
+    this.notify();
+  }
+
+  pausePomodoro() {
+    this.pomodoro.isRunning = false;
+    if (this.pomodoroInterval) {
+      clearInterval(this.pomodoroInterval);
+      this.pomodoroInterval = null;
+    }
+    this.setMood(MOODS.IDLE, 3500, "Focus timer paused. Taking a brief breath together.");
+    this.notify();
+  }
+
+  resetPomodoro() {
+    this.pomodoro.isRunning = false;
+    if (this.pomodoroInterval) {
+      clearInterval(this.pomodoroInterval);
+      this.pomodoroInterval = null;
+    }
+    const focusDuration = this.pomodoro.testMode ? 60 : 25 * 60;
+    const breakDuration = this.pomodoro.testMode ? 15 : 5 * 60;
+    this.pomodoro.mode = 'focus';
+    this.pomodoro.totalDuration = focusDuration;
+    this.pomodoro.timeLeft = focusDuration;
+    this.notify();
+  }
+
+  skipPomodoro() {
+    this._onPomodoroComplete(true);
+  }
+
+  togglePomodoroTestMode() {
+    this.pomodoro.testMode = !this.pomodoro.testMode;
+    const isFocus = this.pomodoro.mode === 'focus';
+    if (this.pomodoro.testMode) {
+      this.pomodoro.totalDuration = isFocus ? 60 : 15;
+    } else {
+      this.pomodoro.totalDuration = isFocus ? 25 * 60 : 5 * 60;
+    }
+    this.pomodoro.timeLeft = this.pomodoro.totalDuration;
+    this.notify();
+  }
+
+  _onPomodoroTick() {
+    if (!this.pomodoro.isRunning) return;
+
+    this.pomodoro.timeLeft--;
+
+    if (this.pomodoro.timeLeft <= 0) {
+      this._onPomodoroComplete(false);
+    } else {
+      this.notify({ pomodoroTick: true });
+    }
+  }
+
+  _onPomodoroComplete(isSkipped = false) {
+    if (this.pomodoro.mode === 'focus') {
+      // Completed Focus Session!
+      if (!isSkipped) {
+        this.pomodoro.sessionsCompleted++;
+        this.affection = Math.min(100, this.affection + 12);
+        this.saveState();
+        this.soundFX.playCelebrationChime();
+      }
+
+      // Transition to Rest Break
+      this.pomodoro.mode = 'break';
+      const breakDuration = this.pomodoro.testMode ? 15 : 5 * 60;
+      this.pomodoro.totalDuration = breakDuration;
+      this.pomodoro.timeLeft = breakDuration;
+
+      // Take off study glasses for break
+      this.customization.glasses = false;
+
+      this.setMood(
+        MOODS.HUGGED,
+        6000,
+        "Focus session complete! 🎉 Put your pen down, take a sip of water, and stretch your arms!"
+      );
+    } else {
+      // Completed Break Session!
+      if (!isSkipped) {
+        this.soundFX.playWakeChirp();
+      }
+
+      // Transition to Focus Session
+      this.pomodoro.mode = 'focus';
+      const focusDuration = this.pomodoro.testMode ? 60 : 25 * 60;
+      this.pomodoro.totalDuration = focusDuration;
+      this.pomodoro.timeLeft = focusDuration;
+
+      // Wear study glasses again
+      this.customization.glasses = true;
+
+      this.setMood(
+        MOODS.HAPPY,
+        5000,
+        "Break time is up! Feel refreshed? Ready for our next focus round whenever you are!"
+      );
+    }
+
+    this.notify();
   }
 }
 

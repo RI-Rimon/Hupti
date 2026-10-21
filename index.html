@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      <!-- Center Status Pill & Affection Bar -->
+      <!-- Center Status Pill & Affection Bar & Pomodoro Pill -->
       <div class="header-center">
         <div id="moodBadge" class="status-pill mood-idle">
           <span class="mood-icon">✨</span> Curious & Relaxed
@@ -50,16 +50,43 @@
           </div>
           <span id="affectionText">60%</span>
         </div>
+
+        <!-- Pomodoro Header Pill (Visible when Focus or Break is active) -->
+        <button id="pomodoroPill" class="pomodoro-header-pill" style="display: none;" title="Open Pomodoro Timer Controls">
+          <span class="pomodoro-pill-icon">🍅</span>
+          <span id="pomodoroPillTime">25:00</span>
+          <span id="pomodoroPillMode" class="pomodoro-pill-tag">Focus</span>
+        </button>
       </div>
 
       <!-- Top Right Action Utilities -->
       <div class="header-actions">
+        <!-- 1. Pomodoro Focus -->
+        <button id="btnPomodoroToggle" class="icon-btn" aria-label="Pomodoro Study Companion" title="Pomodoro Focus Timer (🍅)">
+          <span style="font-size: 1.15rem; line-height: 1;">🍅</span>
+        </button>
+
+        <!-- 2. Ambient Soundscapes -->
+        <button id="btnAmbientToggle" class="icon-btn" aria-label="Ambient Study Soundscapes" title="Ambient Study Soundscapes (🎧)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+          </svg>
+        </button>
+
+        <!-- 3. Wardrobe & Themes -->
+        <button id="btnWardrobeToggle" class="icon-btn" aria-label="Wardrobe & Themes" title="Wardrobe & Themes (🎀)">
+          <span style="font-size: 1.15rem; line-height: 1;">🎀</span>
+        </button>
+
+        <!-- 4. Theme Day/Night -->
         <button id="btnThemeToggle" class="icon-btn" aria-label="Toggle Night Mode" title="Toggle Cozy Night Mode">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
           </svg>
         </button>
 
+        <!-- 5. Sound FX Mute -->
         <button id="btnMuteToggle" class="icon-btn" aria-label="Toggle Sound" title="Mute/Unmute Sound (M)">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
@@ -68,6 +95,7 @@
           </svg>
         </button>
 
+        <!-- 6. Floating PiP -->
         <button id="btnPiPToggle" class="icon-btn" aria-label="Pop out floating Hupti" title="Pop out floating Hupti (PiP)">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
@@ -76,6 +104,7 @@
           </svg>
         </button>
 
+        <!-- 7. Help -->
         <button id="btnHelp" class="icon-btn" aria-label="Controls & Shortcuts" title="Shortcuts & Gestures">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
@@ -141,19 +170,21 @@
             Z
           "/>
 
-          <!-- Cute Pink Flower Blossom Accessory (Exact Matching Theme) -->
+          <!-- Head Accessory Container -->
           <g id="headSprout" transform="translate(108, 30)">
-            <path d="M 0 0 C -2 -7, 0 -13, 2 -16" stroke="#70C1B3" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-            <path d="M 0 -7 C -5 -9, -6 -14, -1 -12 Z" fill="#8CE0D0"/>
-            <!-- 5-petal flower blossom matching brand logo -->
-            <g transform="translate(2, -18) scale(0.65)">
-              <circle cx="0" cy="-8" r="5.2" fill="#FFA5BA"/>
-              <circle cx="7.6" cy="-2.5" r="5.2" fill="#FF83A0"/>
-              <circle cx="4.7" cy="6.5" r="5.2" fill="#FFA5BA"/>
-              <circle cx="-4.7" cy="6.5" r="5.2" fill="#FF83A0"/>
-              <circle cx="-7.6" cy="-2.5" r="5.2" fill="#FFA5BA"/>
-              <circle cx="0" cy="0" r="4.2" fill="#FFD166"/>
-              <circle cx="-1.2" cy="-1.2" r="1.3" fill="#FFFBE6"/>
+            <g id="headAccessoryContent">
+              <path d="M 0 0 C -2 -7, 0 -13, 2 -16" stroke="#70C1B3" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+              <path d="M 0 -7 C -5 -9, -6 -14, -1 -12 Z" fill="#8CE0D0"/>
+              <!-- 5-petal flower blossom matching brand logo -->
+              <g transform="translate(2, -18) scale(0.65)">
+                <circle cx="0" cy="-8" r="5.2" fill="#FFA5BA"/>
+                <circle cx="7.6" cy="-2.5" r="5.2" fill="#FF83A0"/>
+                <circle cx="4.7" cy="6.5" r="5.2" fill="#FFA5BA"/>
+                <circle cx="-4.7" cy="6.5" r="5.2" fill="#FF83A0"/>
+                <circle cx="-7.6" cy="-2.5" r="5.2" fill="#FFA5BA"/>
+                <circle cx="0" cy="0" r="4.2" fill="#FFD166"/>
+                <circle cx="-1.2" cy="-1.2" r="1.3" fill="#FFFBE6"/>
+              </g>
             </g>
           </g>
 
@@ -228,6 +259,21 @@
             <path class="hupti-sleep-eye" d="M 131 110 Q 146 122 161 110" style="opacity: 0;"/>
             <!-- Sad Tear (shown when Sad) -->
             <path class="hupti-tear-drop" d="M 163 122 Q 166 129 163 134 Q 159 129 163 122" fill="#89CFF0" style="opacity: 0;"/>
+          </g>
+
+          <!-- Wireframe Study Glasses (Worn during Focus or via Wardrobe) -->
+          <g id="accessoryGlasses" class="hupti-glasses-group" style="display: none;">
+            <!-- Left Rim -->
+            <circle cx="74" cy="110" r="23" fill="rgba(255, 255, 255, 0.08)" stroke="#583C4F" stroke-width="2.6"/>
+            <path d="M 60 97 A 23 23 0 0 1 88 97" fill="none" stroke="rgba(255, 255, 255, 0.65)" stroke-width="2.2" stroke-linecap="round"/>
+            <!-- Right Rim -->
+            <circle cx="146" cy="110" r="23" fill="rgba(255, 255, 255, 0.08)" stroke="#583C4F" stroke-width="2.6"/>
+            <path d="M 132 97 A 23 23 0 0 1 160 97" fill="none" stroke="rgba(255, 255, 255, 0.65)" stroke-width="2.2" stroke-linecap="round"/>
+            <!-- Bridge -->
+            <path d="M 97 110 Q 110 105 123 110" fill="none" stroke="#583C4F" stroke-width="2.6" stroke-linecap="round"/>
+            <!-- Left & Right Temples -->
+            <path d="M 51 110 Q 42 108 34 114" fill="none" stroke="#583C4F" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M 169 110 Q 178 108 186 114" fill="none" stroke="#583C4F" stroke-width="2.2" stroke-linecap="round"/>
           </g>
 
           <!-- Responsive Animated Mouth -->
@@ -366,6 +412,14 @@
               <span>Floating Mini Window</span>
               <span class="key-hint">O / PiP</span>
             </div>
+            <div class="shortcut-item">
+              <span>Ambient Soundscapes</span>
+              <span class="key-hint">B</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Wardrobe &amp; Themes</span>
+              <span class="key-hint">C</span>
+            </div>
           </div>
         </div>
 
@@ -446,6 +500,213 @@
           <p>Hupti is sending you lots of love! 💖</p>
           <button id="btnFeedbackDone" class="action-pill" style="margin-top: 1.25rem;">Back to Hupti 🌸</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. Pomodoro Study Companion Modal -->
+  <div id="pomodoroModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="pomodoroTitle">
+    <div class="modal-card pomodoro-card">
+      <div class="modal-header">
+        <h2 id="pomodoroTitle">🍅 Pomodoro Study Companion</h2>
+        <button id="btnClosePomodoro" class="modal-close" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body pomodoro-modal-body">
+        <div class="pomodoro-mode-switcher">
+          <button id="btnModeFocus" class="pomodoro-tab active">🎯 Focus (25m)</button>
+          <button id="btnModeBreak" class="pomodoro-tab">☕ Rest Break (5m)</button>
+        </div>
+
+        <div class="pomodoro-timer-display" id="pomodoroBigDisplay">
+          <span id="pomoMinutes">25</span>:<span id="pomoSeconds">00</span>
+        </div>
+
+        <div class="pomodoro-status-tag" id="pomodoroStatusLabel">
+          Ready for your next study sprint!
+        </div>
+
+        <div class="pomodoro-controls-row">
+          <button id="btnPomoStartPause" class="pomodoro-action-btn primary">
+            <span id="pomoStartIcon">▶️</span> <span id="pomoStartText">Start Focus</span>
+          </button>
+          <button id="btnPomoReset" class="pomodoro-action-btn secondary" title="Reset timer to beginning">
+            🔄 Reset
+          </button>
+          <button id="btnPomoSkip" class="pomodoro-action-btn secondary" title="Skip to next session">
+            ⏭️ Skip
+          </button>
+        </div>
+
+        <div class="pomodoro-meta-box">
+          <div class="pomodoro-stat-item">
+            <span>Sessions Completed Today:</span>
+            <strong id="pomoCompletedCount" class="stat-highlight">⭐️ 0</strong>
+          </div>
+          <label class="pomodoro-test-toggle" title="Shortens focus to 60s and break to 15s for quick testing">
+            <input type="checkbox" id="checkPomoTest" />
+            <span>⚡ 1-Minute Quick Test Mode</span>
+          </label>
+        </div>
+
+        <div class="pomodoro-hint-note">
+          🌸 <em>During focus mode, Hupti puts on her tiny wireframe glasses and studies quietly beside you. When you complete a session, she celebrates and reminds you to hydrate and stretch!</em>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Procedural Ambient Lo-Fi / Rain Soundscapes Modal -->
+  <div id="ambientModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="ambientTitle">
+    <div class="modal-card ambient-card">
+      <div class="modal-header">
+        <h2 id="ambientTitle">🎧 Ambient Study Soundscapes</h2>
+        <button id="btnCloseAmbient" class="modal-close" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body ambient-modal-body">
+        <p class="ambient-description">
+          Organic ambient study environments generated in real-time via the <strong>Web Audio API</strong>. 100% procedural, infinite, and zero external audio files.
+        </p>
+
+        <div class="ambient-grid">
+          <!-- Rain -->
+          <div class="ambient-option active" data-ambient="rain">
+            <div class="ambient-icon">🌧️</div>
+            <div class="ambient-info">
+              <h4>Gentle Rain</h4>
+              <p>Soft rainfall and delicate drops tapping against a cozy window pane.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- Wind Chimes -->
+          <div class="ambient-option" data-ambient="chimes">
+            <div class="ambient-icon">🎐</div>
+            <div class="ambient-info">
+              <h4>Zen Wind Chimes</h4>
+              <p>Tranquil pentatonic bells echoing gently through a summer breeze.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- Fireplace -->
+          <div class="ambient-option" data-ambient="fireplace">
+            <div class="ambient-icon">🔥</div>
+            <div class="ambient-info">
+              <h4>Cozy Hearth</h4>
+              <p>Deep warm embers and gentle micro-crackles of a quiet fireplace.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- Lo-Fi Pad -->
+          <div class="ambient-option" data-ambient="lofi">
+            <div class="ambient-icon">🎵</div>
+            <div class="ambient-info">
+              <h4>Lo-Fi Warm Pad</h4>
+              <p>Soft, tape-warmed jazzy chord swells for deep uninterrupted concentration.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+        </div>
+
+        <!-- Volume & Playback Controls -->
+        <div class="ambient-controls-box">
+          <div class="ambient-volume-row">
+            <span class="ambient-vol-icon">🔉</span>
+            <input type="range" id="ambientVolumeSlider" min="0" max="100" value="50" class="ambient-slider" />
+            <span id="ambientVolumeLabel" class="ambient-vol-label">50%</span>
+          </div>
+
+          <button id="btnAmbientTogglePlay" class="ambient-play-btn">
+            <span id="ambientPlayIcon">▶️</span> <span id="ambientPlayText">Play Soundscape</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Wardrobe & Themes Customization Modal -->
+  <div id="wardrobeModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="wardrobeTitle">
+    <div class="modal-card wardrobe-card">
+      <div class="modal-header">
+        <h2 id="wardrobeTitle">🎀 Hupti's Wardrobe &amp; Themes</h2>
+        <button id="btnCloseWardrobe" class="modal-close" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body wardrobe-modal-body">
+        
+        <!-- Section A: Head Accessories -->
+        <div class="wardrobe-section">
+          <h3>🌸 Head Accessory / Blossom</h3>
+          <div class="wardrobe-grid" id="accessoryGrid">
+            <div class="wardrobe-item active" data-accessory="sakura">
+              <span class="wardrobe-emoji">🌸</span>
+              <span class="wardrobe-label">Sakura</span>
+            </div>
+            <div class="wardrobe-item" data-accessory="sunflower">
+              <span class="wardrobe-emoji">🌻</span>
+              <span class="wardrobe-label">Sunflower</span>
+            </div>
+            <div class="wardrobe-item" data-accessory="snowdrop">
+              <span class="wardrobe-emoji">❄️</span>
+              <span class="wardrobe-label">Snowdrop</span>
+            </div>
+            <div class="wardrobe-item" data-accessory="sprout">
+              <span class="wardrobe-emoji">🌱</span>
+              <span class="wardrobe-label">Sprout</span>
+            </div>
+            <div class="wardrobe-item" data-accessory="gradcap">
+              <span class="wardrobe-emoji">🎓</span>
+              <span class="wardrobe-label">Scholar</span>
+            </div>
+            <div class="wardrobe-item" data-accessory="ribbon">
+              <span class="wardrobe-emoji">🎀</span>
+              <span class="wardrobe-label">Ribbon</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section B: Eyewear -->
+        <div class="wardrobe-section">
+          <h3>👓 Eyewear</h3>
+          <label class="glasses-toggle-card">
+            <input type="checkbox" id="checkWardrobeGlasses" />
+            <div class="glasses-toggle-info">
+              <span class="glasses-emoji">🤓</span>
+              <div>
+                <strong>Wireframe Study Glasses</strong>
+                <p>Wear tiny chic glasses anytime (automatically worn during Pomodoro focus).</p>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Section C: Body Color Tints -->
+        <div class="wardrobe-section">
+          <h3>🎨 Body Color Tints</h3>
+          <div class="tint-grid" id="tintGrid">
+            <button class="tint-swatch active" data-tint="strawberry" title="Strawberry Cream (Default)">
+              <span class="swatch-circle tint-strawberry-preview"></span>
+              <span class="swatch-label">Strawberry</span>
+            </button>
+            <button class="tint-swatch" data-tint="lavender" title="Lavender Twilight">
+              <span class="swatch-circle tint-lavender-preview"></span>
+              <span class="swatch-label">Lavender</span>
+            </button>
+            <button class="tint-swatch" data-tint="sage" title="Mint Sage">
+              <span class="swatch-circle tint-sage-preview"></span>
+              <span class="swatch-label">Mint Sage</span>
+            </button>
+            <button class="tint-swatch" data-tint="peach" title="Honey Peach">
+              <span class="swatch-circle tint-peach-preview"></span>
+              <span class="swatch-label">Honey Peach</span>
+            </button>
+            <button class="tint-swatch" data-tint="sky" title="Sky Blue">
+              <span class="swatch-circle tint-sky-preview"></span>
+              <span class="swatch-label">Sky Blue</span>
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

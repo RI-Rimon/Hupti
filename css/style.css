@@ -1129,3 +1129,542 @@ body.hupti-sleeping-mode .hupti-avatar-svg {
     font-size: 0.76rem;
   }
 }
+
+/* ==========================================================================
+   Feature 1: Pomodoro Study Companion Styles
+   ========================================================================== */
+
+.pomodoro-header-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.85rem;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 101, 132, 0.4);
+  border-radius: 9999px;
+  font-family: 'Fredoka', cursive, sans-serif;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-main);
+  box-shadow: 0 4px 14px -2px rgba(255, 101, 132, 0.2);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  animation: pulse-gentle 2.6s infinite ease-in-out;
+}
+
+.pomodoro-header-pill:hover {
+  transform: scale(1.05);
+  border-color: var(--accent-pink);
+}
+
+.pomodoro-pill-tag {
+  font-size: 0.7rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.1rem 0.45rem;
+  border-radius: 9999px;
+  background: var(--accent-pink-soft);
+  color: var(--accent-pink);
+  font-weight: 700;
+}
+
+.pomodoro-card {
+  max-width: 440px;
+}
+
+.pomodoro-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.pomodoro-mode-switcher {
+  display: flex;
+  gap: 8px;
+  background: var(--progress-track);
+  padding: 4px;
+  border-radius: 9999px;
+  width: 100%;
+}
+
+.pomodoro-tab {
+  flex: 1;
+  padding: 0.5rem 0.8rem;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pomodoro-tab.active {
+  background: var(--bg-card);
+  color: var(--text-main);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.pomodoro-timer-display {
+  font-family: 'Fredoka', cursive, sans-serif;
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--accent-pink);
+  letter-spacing: 2px;
+  line-height: 1;
+  margin: 0.35rem 0;
+  text-shadow: 0 6px 18px var(--accent-pink-glow);
+}
+
+.pomodoro-status-tag {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.pomodoro-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.pomodoro-action-btn {
+  padding: 0.65rem 1.4rem;
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pomodoro-action-btn.primary {
+  background: linear-gradient(135deg, #FF7B99, #FF527B);
+  color: #FFFFFF;
+  border: none;
+  box-shadow: 0 6px 18px -2px rgba(255, 101, 132, 0.45);
+}
+
+.pomodoro-action-btn.primary:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 10px 24px -2px rgba(255, 101, 132, 0.55);
+}
+
+.pomodoro-action-btn.secondary {
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  color: var(--text-main);
+}
+
+.pomodoro-action-btn.secondary:hover {
+  background: var(--btn-hover-bg);
+  color: var(--accent-pink);
+  transform: translateY(-2px);
+}
+
+.pomodoro-meta-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 12px;
+  font-size: 0.82rem;
+  color: var(--text-main);
+}
+
+.stat-highlight {
+  color: var(--accent-pink);
+}
+
+.pomodoro-test-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.pomodoro-test-toggle input {
+  cursor: pointer;
+  accent-color: var(--accent-pink);
+}
+
+.pomodoro-hint-note {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+  text-align: center;
+  background: var(--accent-pink-soft);
+  padding: 0.55rem 0.85rem;
+  border-radius: 12px;
+}
+
+/* ==========================================================================
+   Feature 2: Ambient Lo-Fi & Rain Soundscapes Styles
+   ========================================================================== */
+
+.ambient-card {
+  max-width: 480px;
+}
+
+.ambient-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.ambient-description {
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.ambient-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.ambient-option {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.75rem 0.85rem;
+  background: var(--bg-card);
+  border: 1px solid var(--btn-border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.ambient-option:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-pink);
+}
+
+.ambient-option.active {
+  border-color: var(--accent-pink);
+  background: var(--accent-pink-soft);
+  box-shadow: 0 4px 14px -2px var(--accent-pink-glow);
+}
+
+.ambient-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.ambient-info h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+  color: var(--text-main);
+}
+
+.ambient-info p {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
+.ambient-active-badge {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--accent-pink);
+  color: #FFFFFF;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.ambient-option.active .ambient-active-badge {
+  display: block;
+}
+
+.ambient-controls-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--btn-border);
+}
+
+.ambient-volume-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.ambient-slider {
+  flex: 1;
+  accent-color: var(--accent-pink);
+  cursor: pointer;
+}
+
+.ambient-vol-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: right;
+}
+
+.ambient-play-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #FF7B99, #FF527B);
+  color: #FFFFFF;
+  border: none;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 6px 18px -2px rgba(255, 101, 132, 0.4);
+  transition: all 0.22s ease;
+}
+
+.ambient-play-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -2px rgba(255, 101, 132, 0.55);
+}
+
+.ambient-play-btn.playing {
+  background: linear-gradient(135deg, #52B788, #40916C);
+  box-shadow: 0 6px 18px -2px rgba(82, 183, 136, 0.4);
+}
+
+/* ==========================================================================
+   Feature 3: Wardrobe & Custom Themes Styles
+   ========================================================================== */
+
+.wardrobe-card {
+  max-width: 500px;
+}
+
+.wardrobe-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.wardrobe-section h3 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.65rem;
+}
+
+.wardrobe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.wardrobe-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.75rem 0.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--btn-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.wardrobe-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-pink);
+}
+
+.wardrobe-item.active {
+  border-color: var(--accent-pink);
+  background: var(--accent-pink-soft);
+  box-shadow: 0 4px 14px -2px var(--accent-pink-glow);
+}
+
+.wardrobe-emoji {
+  font-size: 1.6rem;
+}
+
+.wardrobe-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.glasses-toggle-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--btn-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.glasses-toggle-card:hover {
+  border-color: var(--accent-pink);
+}
+
+.glasses-toggle-card input {
+  accent-color: var(--accent-pink);
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.glasses-toggle-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.glasses-emoji {
+  font-size: 1.6rem;
+}
+
+.glasses-toggle-info strong {
+  display: block;
+  font-size: 0.86rem;
+  color: var(--text-main);
+}
+
+.glasses-toggle-info p {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.tint-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.tint-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem 0.3rem;
+  background: var(--bg-card);
+  border: 1px solid var(--btn-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tint-swatch:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-pink);
+}
+
+.tint-swatch.active {
+  border-color: var(--accent-pink);
+  box-shadow: 0 4px 12px -2px var(--accent-pink-glow);
+}
+
+.swatch-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.swatch-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: center;
+}
+
+.tint-strawberry-preview {
+  background: radial-gradient(circle at 40% 40%, #FFFFFF, #FFE4EE);
+}
+
+.tint-lavender-preview {
+  background: radial-gradient(circle at 40% 40%, #FFFFFF, #EDE0FF);
+}
+
+.tint-sage-preview {
+  background: radial-gradient(circle at 40% 40%, #FFFFFF, #DCF2E4);
+}
+
+.tint-peach-preview {
+  background: radial-gradient(circle at 40% 40%, #FFFFFF, #FFE7D6);
+}
+
+.tint-sky-preview {
+  background: radial-gradient(circle at 40% 40%, #FFFFFF, #D8ECFD);
+}
+
+/* Color Tint Themes on Body & Environment */
+[data-tint="lavender"] {
+  --accent-pink: #9D7BE8;
+  --accent-pink-glow: rgba(157, 123, 232, 0.35);
+  --accent-pink-soft: rgba(157, 123, 232, 0.12);
+}
+
+[data-tint="sage"] {
+  --accent-pink: #52B788;
+  --accent-pink-glow: rgba(82, 183, 136, 0.35);
+  --accent-pink-soft: rgba(82, 183, 136, 0.12);
+}
+
+[data-tint="peach"] {
+  --accent-pink: #FF8A5B;
+  --accent-pink-glow: rgba(255, 138, 91, 0.35);
+  --accent-pink-soft: rgba(255, 138, 91, 0.12);
+}
+
+[data-tint="sky"] {
+  --accent-pink: #4895EF;
+  --accent-pink-glow: rgba(72, 149, 239, 0.35);
+  --accent-pink-soft: rgba(72, 149, 239, 0.12);
+}
+
+@media (max-width: 600px) {
+  .ambient-grid {
+    grid-template-columns: 1fr;
+  }
+  .wardrobe-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .tint-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .pomodoro-timer-display {
+    font-size: 3.2rem;
+  }
+}

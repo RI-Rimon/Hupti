@@ -413,18 +413,20 @@ class PiPManager {
               Z
             "/>
 
-            <!-- Head Blossom -->
-            <g transform="translate(108, 30)">
-              <path d="M 0 0 C -2 -7, 0 -13, 2 -16" stroke="#70C1B3" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-              <path d="M 0 -7 C -5 -9, -6 -14, -1 -12 Z" fill="#8CE0D0"/>
-              <g transform="translate(2, -18) scale(0.65)">
-                <circle cx="0" cy="-8" r="5.2" fill="#FFA5BA"/>
-                <circle cx="7.6" cy="-2.5" r="5.2" fill="#FF83A0"/>
-                <circle cx="4.7" cy="6.5" r="5.2" fill="#FFA5BA"/>
-                <circle cx="-4.7" cy="6.5" r="5.2" fill="#FF83A0"/>
-                <circle cx="-7.6" cy="-2.5" r="5.2" fill="#FFA5BA"/>
-                <circle cx="0" cy="0" r="4.2" fill="#FFD166"/>
-                <circle cx="-1.2" cy="-1.2" r="1.3" fill="#FFFBE6"/>
+            <!-- Head Blossom / Accessory Container -->
+            <g id="miniHeadSprout" transform="translate(108, 30)">
+              <g id="miniAccessoryContent">
+                <path d="M 0 0 C -2 -7, 0 -13, 2 -16" stroke="#70C1B3" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+                <path d="M 0 -7 C -5 -9, -6 -14, -1 -12 Z" fill="#8CE0D0"/>
+                <g transform="translate(2, -18) scale(0.65)">
+                  <circle cx="0" cy="-8" r="5.2" fill="#FFA5BA"/>
+                  <circle cx="7.6" cy="-2.5" r="5.2" fill="#FF83A0"/>
+                  <circle cx="4.7" cy="6.5" r="5.2" fill="#FFA5BA"/>
+                  <circle cx="-4.7" cy="6.5" r="5.2" fill="#FF83A0"/>
+                  <circle cx="-7.6" cy="-2.5" r="5.2" fill="#FFA5BA"/>
+                  <circle cx="0" cy="0" r="4.2" fill="#FFD166"/>
+                  <circle cx="-1.2" cy="-1.2" r="1.3" fill="#FFFBE6"/>
+                </g>
               </g>
             </g>
 
@@ -462,6 +464,13 @@ class PiPManager {
               </g>
               <path class="mini-happy-eye" d="M 130 114 Q 146 94 162 114" fill="none" stroke="#453347" stroke-width="4.5" stroke-linecap="round" style="opacity: 0;"/>
               <path class="mini-sleep-eye" d="M 131 110 Q 146 122 161 110" fill="none" stroke="#453347" stroke-width="4.5" stroke-linecap="round" style="opacity: 0;"/>
+            </g>
+
+            <!-- Mini Study Glasses -->
+            <g id="miniAccessoryGlasses" style="display: none;">
+              <circle cx="74" cy="110" r="23" fill="none" stroke="#583C4F" stroke-width="2.6"/>
+              <circle cx="146" cy="110" r="23" fill="none" stroke="#583C4F" stroke-width="2.6"/>
+              <path d="M 97 110 Q 110 105 123 110" fill="none" stroke="#583C4F" stroke-width="2.6" stroke-linecap="round"/>
             </g>
 
             <!-- Mouth -->
@@ -509,7 +518,9 @@ class PiPManager {
       pupils: pipDoc.querySelectorAll('.mini-pupil-group'),
       happyEyes: pipDoc.querySelectorAll('.mini-happy-eye'),
       sleepEyes: pipDoc.querySelectorAll('.mini-sleep-eye'),
-      heartsContainer: pipDoc.getElementById('miniHeartsContainer')
+      heartsContainer: pipDoc.getElementById('miniHeartsContainer'),
+      glasses: pipDoc.getElementById('miniAccessoryGlasses'),
+      accessory: pipDoc.getElementById('miniAccessoryContent')
     };
 
     // Bind event handlers
@@ -661,6 +672,20 @@ class PiPManager {
         this.miniElements.blushL.style.opacity = '0.55';
         this.miniElements.blushR.style.opacity = '0.55';
       }
+    }
+
+    // Glasses & Customization Sync
+    if (this.miniElements.glasses && state.customization) {
+      this.miniElements.glasses.style.display = state.customization.glasses ? 'inline' : 'none';
+    }
+
+    // Pomodoro badge indicator in PiP
+    if (state.pomodoro && state.pomodoro.isActive && this.miniElements.moodBadge) {
+      const mins = Math.floor(state.pomodoro.timeLeft / 60);
+      const secs = state.pomodoro.timeLeft % 60;
+      const timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      const isFocus = state.pomodoro.mode === 'focus';
+      this.miniElements.moodBadge.innerHTML = `<span>🍅</span> ${timeStr} (${isFocus ? 'Focus' : 'Break'})`;
     }
   }
 

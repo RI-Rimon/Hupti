@@ -679,6 +679,148 @@ class HuptiRenderer {
     ctx.closePath();
     ctx.fill();
   }
+
+  /**
+   * Apply head accessory (Blossoms, Sprout, Grad Cap, Ribbon)
+   */
+  applyAccessory(accessoryId) {
+    const container = document.getElementById('headAccessoryContent');
+    if (!container) return;
+
+    const templates = {
+      sakura: `
+        <path d="M 0 0 C -2 -7, 0 -13, 2 -16" stroke="#70C1B3" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <path d="M 0 -7 C -5 -9, -6 -14, -1 -12 Z" fill="#8CE0D0"/>
+        <g transform="translate(2, -18) scale(0.65)">
+          <circle cx="0" cy="-8" r="5.2" fill="#FFA5BA"/>
+          <circle cx="7.6" cy="-2.5" r="5.2" fill="#FF83A0"/>
+          <circle cx="4.7" cy="6.5" r="5.2" fill="#FFA5BA"/>
+          <circle cx="-4.7" cy="6.5" r="5.2" fill="#FF83A0"/>
+          <circle cx="-7.6" cy="-2.5" r="5.2" fill="#FFA5BA"/>
+          <circle cx="0" cy="0" r="4.2" fill="#FFD166"/>
+          <circle cx="-1.2" cy="-1.2" r="1.3" fill="#FFFBE6"/>
+        </g>
+      `,
+      sunflower: `
+        <path d="M 0 0 C -2 -7, 0 -13, 2 -16" stroke="#52B788" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <path d="M 0 -7 C -5 -9, -6 -14, -1 -12 Z" fill="#74C69D"/>
+        <g transform="translate(2, -18) scale(0.65)">
+          <circle cx="0" cy="-8" r="4.8" fill="#FFD166"/>
+          <circle cx="5.6" cy="-5.6" r="4.8" fill="#FFC043"/>
+          <circle cx="8" cy="0" r="4.8" fill="#FFD166"/>
+          <circle cx="5.6" cy="5.6" r="4.8" fill="#FFC043"/>
+          <circle cx="0" cy="8" r="4.8" fill="#FFD166"/>
+          <circle cx="-5.6" cy="5.6" r="4.8" fill="#FFC043"/>
+          <circle cx="-8" cy="0" r="4.8" fill="#FFD166"/>
+          <circle cx="-5.6" cy="-5.6" r="4.8" fill="#FFC043"/>
+          <circle cx="0" cy="0" r="5.4" fill="#6B4423"/>
+          <circle cx="-1.2" cy="-1.2" r="1.4" fill="#996035"/>
+        </g>
+      `,
+      snowdrop: `
+        <path d="M 0 0 C -2 -7, 0 -13, 2 -16" stroke="#70C1B3" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <g transform="translate(2, -18) scale(0.72)">
+          <path d="M 0 -8 C -4 -2, -5 6, 0 8 C 5 6, 4 -2, 0 -8 Z" fill="#E2F4FD"/>
+          <path d="M -5 -4 C -8 0, -8 6, -3 8 C -1 6, -3 0, -5 -4 Z" fill="#BFE3F7"/>
+          <path d="M 5 -4 C 8 0, 8 6, 3 8 C 1 6, 3 0, 5 -4 Z" fill="#BFE3F7"/>
+          <circle cx="0" cy="-7" r="2.2" fill="#8CE0D0"/>
+        </g>
+      `,
+      sprout: `
+        <path d="M 0 0 C -1 -6, 0 -12, 1 -15" stroke="#52B788" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+        <g transform="translate(1, -15) scale(0.85)">
+          <path d="M -1 0 C -8 -4, -10 -12, -2 -11 C -2 -4, -1 -1, -1 0 Z" fill="#8CE0D0"/>
+          <path d="M 1 0 C 8 -4, 10 -12, 2 -11 C 2 -4, 1 -1, 1 0 Z" fill="#52B788"/>
+        </g>
+      `,
+      gradcap: `
+        <g transform="translate(2, -16) scale(0.82)">
+          <polygon points="0,-10 14,-2 0,6 -14,-2" fill="#2E2538"/>
+          <polygon points="0,-8 11,-2 0,4 -11,-2" fill="#3D324A"/>
+          <rect x="-6" y="2" width="12" height="6" rx="2" fill="#241B2D"/>
+          <circle cx="0" cy="-2" r="1.6" fill="#FFD166"/>
+          <path d="M 0 -2 Q 9 2 10 10" stroke="#FFD166" stroke-width="1.4" fill="none"/>
+          <circle cx="10" cy="11" r="1.4" fill="#FFA500"/>
+        </g>
+      `,
+      ribbon: `
+        <g transform="translate(2, -16) scale(0.78)">
+          <path d="M -1 -2 C -10 -10, -12 6, -1 1 Z" fill="#FF83A0"/>
+          <path d="M -1 -1 C -7 -7, -9 4, -1 1 Z" fill="#FFA5BA"/>
+          <path d="M 1 -2 C 10 -10, 12 6, 1 1 Z" fill="#FF83A0"/>
+          <path d="M 1 -1 C 7 -7, 9 4, 1 1 Z" fill="#FFA5BA"/>
+          <path d="M -2 2 Q -6 10 -8 14" stroke="#FF6584" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M 2 2 Q 6 10 8 14" stroke="#FF6584" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <circle cx="0" cy="0" r="3.2" fill="#FF527B"/>
+          <circle cx="-0.8" cy="-0.8" r="1" fill="#FFFBE6"/>
+        </g>
+      `
+    };
+
+    container.innerHTML = templates[accessoryId] || templates.sakura;
+  }
+
+  /**
+   * Toggle study wireframe glasses
+   */
+  setGlasses(show) {
+    const glasses = document.getElementById('accessoryGlasses');
+    if (!glasses) return;
+    glasses.style.display = show ? 'inline' : 'none';
+  }
+
+  /**
+   * Apply color tint to body gradient & theme
+   */
+  applyTint(tintId) {
+    document.documentElement.setAttribute('data-tint', tintId);
+    
+    const gradLight = document.getElementById('huptiBodyGradient');
+    const gradDark = document.getElementById('huptiBodyDarkGradient');
+
+    const tints = {
+      strawberry: {
+        light: ['#FFFFFF', '#FFF3F7', '#FFE4EE'],
+        dark: ['#FAF5FF', '#EADBFF', '#D5BFFF']
+      },
+      lavender: {
+        light: ['#FFFFFF', '#F8F3FF', '#EDE0FF'],
+        dark: ['#F5EFFF', '#DFCBFC', '#C4A5FA']
+      },
+      sage: {
+        light: ['#FFFFFF', '#F2FAF5', '#DCF2E4'],
+        dark: ['#EBF7EF', '#C8E8D3', '#A0D4B2']
+      },
+      peach: {
+        light: ['#FFFFFF', '#FFF6F0', '#FFE7D6'],
+        dark: ['#FFF1E6', '#FED1B2', '#FDB180']
+      },
+      sky: {
+        light: ['#FFFFFF', '#F0F8FF', '#D8ECFD'],
+        dark: ['#E5F3FD', '#BADBF9', '#8AC2F4']
+      }
+    };
+
+    const scheme = tints[tintId] || tints.strawberry;
+
+    if (gradLight) {
+      const stops = gradLight.querySelectorAll('stop');
+      if (stops.length >= 3) {
+        stops[0].setAttribute('stop-color', scheme.light[0]);
+        stops[1].setAttribute('stop-color', scheme.light[1]);
+        stops[2].setAttribute('stop-color', scheme.light[2]);
+      }
+    }
+
+    if (gradDark) {
+      const stops = gradDark.querySelectorAll('stop');
+      if (stops.length >= 3) {
+        stops[0].setAttribute('stop-color', scheme.dark[0]);
+        stops[1].setAttribute('stop-color', scheme.dark[1]);
+        stops[2].setAttribute('stop-color', scheme.dark[2]);
+      }
+    }
+  }
 }
 
 // Expose globally
