@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hupti — The Expressive Virtual Pet</title>
+  <meta name="description" content="A complete, responsive, and minimalist interactive web application for Hupti, an expressive virtual pet companion.">
+
+  <!-- Immediate Theme & Background Pre-Init -->
+  <script src="js/theme-init.js?v=3.0"></script>
+  <link rel="stylesheet" href="css/style.css?v=3.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='9' r='5.2' fill='%23FFA5BA'/><circle cx='22.5' cy='13.5' r='5.2' fill='%23FF83A0'/><circle cx='20' cy='21.5' r='5.2' fill='%23FFA5BA'/><circle cx='12' cy='21.5' r='5.2' fill='%23FF83A0'/><circle cx='9.5' cy='13.5' r='5.2' fill='%23FFA5BA'/><circle cx='16' cy='16' r='4.2' fill='%23FFD166'/><circle cx='14.8' cy='14.8' r='1.3' fill='%23FFFBE6'/></svg>">
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+  <!-- Particle Background Canvas for Ambient Motes & Burst Effects -->
+  <canvas id="particleCanvas" class="canvas-particles"></canvas>
+
+  <!-- Main Application Wrapper -->
+  <main class="app-container">
+
+    <!-- Top Header Navigation & Status -->
+    <header class="header-bar">
+      <!-- Top-Left: Brand Alignment (Clean with zero overlapping elements) -->
+      <div class="header-left">
+        <div class="brand-wrapper">
+          <div class="brand-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="9" r="5.2" fill="#FFA5BA"/>
+              <circle cx="22.5" cy="13.5" r="5.2" fill="#FF83A0"/>
+              <circle cx="20" cy="21.5" r="5.2" fill="#FFA5BA"/>
+              <circle cx="12" cy="21.5" r="5.2" fill="#FF83A0"/>
+              <circle cx="9.5" cy="13.5" r="5.2" fill="#FFA5BA"/>
+              <circle cx="16" cy="16" r="4.2" fill="#FFD166"/>
+              <circle cx="14.8" cy="14.8" r="1.3" fill="#FFFBE6"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>Hupti</h1>
+            <p>Your Expressive Companion</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Status Pill & Affection Bar & Pomodoro Pill -->
+      <div class="header-center">
+        <div id="moodBadge" class="status-pill mood-idle">
+          <span class="mood-icon">✨</span> Curious &amp; Relaxed
+        </div>
+
+        <div class="affection-pill" title="Affection Level (Increases with pets and treats)">
+          <span class="affection-heart">💖</span>
+          <div class="affection-bar-wrapper">
+            <div id="affectionFill" class="affection-fill"></div>
+          </div>
+          <span id="affectionText">60%</span>
+        </div>
+
+        <!-- Pomodoro Header Pill (Visible when Focus or Break is active) -->
+        <button id="pomodoroPill" class="pomodoro-header-pill" style="display: none;" aria-label="Open Pomodoro Timer Controls" title="Open Pomodoro Timer Controls">
+          <span class="pomodoro-pill-icon">🍅</span>
+          <span id="pomodoroPillTime">25:00</span>
+          <span id="pomodoroPillMode" class="pomodoro-pill-tag">Focus</span>
+        </button>
+      </div>
+
+      <!-- Top-Right Controls & Action Bar -->
+      <div class="header-right-wrapper">
+        <!-- Row 1 (Top): Utility Icons (Pomodoro, Ambient, Wardrobe, Night Mode, Mute, PiP, Help) -->
+        <div class="header-row-top">
+          <!-- 1. Pomodoro Focus -->
+          <button id="btnPomodoroToggle" class="icon-btn" aria-label="Pomodoro Focus Timer (25m Focus / 5m Break)" title="Pomodoro Focus Timer (🍅)">
+            <span style="font-size: 1.15rem; line-height: 1;">🍅</span>
+          </button>
+
+          <!-- 2. Ambient Soundscapes -->
+          <button id="btnAmbientToggle" class="icon-btn" aria-label="Ambient Study Soundscapes (14 Procedural Tracks)" title="Ambient Study Soundscapes (🎧)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+              <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+            </svg>
+          </button>
+
+          <!-- 3. Wardrobe & Themes -->
+          <button id="btnWardrobeToggle" class="icon-btn" aria-label="Wardrobe Customization &amp; Ambient Desk Themes (C)" title="Wardrobe &amp; Themes (🎀)">
+            <span style="font-size: 1.15rem; line-height: 1;">🎀</span>
+          </button>
+
+          <!-- 4. Theme Day/Night -->
+          <button id="btnThemeToggle" class="icon-btn" aria-label="Toggle Cozy Night Mode" title="Toggle Cozy Night Mode (🌙)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+
+          <!-- 5. Sound FX Mute -->
+          <button id="btnMuteToggle" class="icon-btn" aria-label="Mute or Unmute Procedural Sound Effects (M)" title="Mute/Unmute Sound (M)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+          </button>
+
+          <!-- 6. Floating PiP -->
+          <button id="btnPiPToggle" class="icon-btn" aria-label="Pop Out Floating Companion to Desktop Window (O)" title="Pop out floating Hupti (PiP - O)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <rect x="11" y="9" width="9" height="6" rx="1"/>
+              <polyline points="14 9 14 11 16 11"/>
+            </svg>
+          </button>
+
+          <!-- 7. Help -->
+          <button id="btnHelp" class="icon-btn" aria-label="Keyboard Shortcuts &amp; Interaction Guide (?)" title="Controls &amp; Shortcuts (?)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Row 2 (Bottom): Workflow Capsules (Music, Taskbox, Typing Speed) -->
+        <div class="header-row-bottom">
+          <!-- Ambient Quick Selector -->
+          <div class="ambient-quick-wrapper" title="Select ambient background music or soundscape">
+            <select id="ambientQuickSelect" class="ambient-quick-select" aria-label="Quick Ambient Soundscape" title="Select ambient background music or soundscape">
+              <option value="off">🎵 Music: Off</option>
+              <option value="rain">🌧️ Rain</option>
+              <option value="coffeeshop">☕ Cozy Lo-Fi</option>
+              <option value="forest">🌲 Forest Breeze</option>
+              <option value="zen">🔔 Zen Chimes</option>
+              <option value="ocean">🌊 Ocean Waves</option>
+              <option value="midnight">🌙 Midnight Beats</option>
+              <option value="hearth">🔥 Purr &amp; Hearth</option>
+              <option value="meadow">🌾 Night Meadow</option>
+              <option value="bamboo_flute">🎋 Bamboo Flute</option>
+              <option value="acoustic_guitar">🎸 Acoustic Guitar</option>
+              <option value="piano_harmonium">🎹 Piano &amp; Harmonium</option>
+              <option value="kyoto_temple">⛩️ Kyoto Temple Rain</option>
+              <option value="latenight_lofi">🎧 Late Night Beats</option>
+              <option value="nordic_brook">🏞️ Nordic Brook</option>
+            </select>
+          </div>
+
+          <!-- 📝 Taskbox Button -->
+          <button id="btnTaskboxToggle" class="taskbox-pill-btn" aria-label="Open Taskbox Planner &amp; Reminders" title="Open Taskbox Planner &amp; Reminders">
+            <span class="taskbox-pill-icon">📝</span>
+            <span class="taskbox-pill-label">Taskbox</span>
+            <span id="taskboxBadge" class="taskbox-count-badge" style="display: none;">0</span>
+          </button>
+
+          <!-- ⌨️ Typing Speed Pill Button -->
+          <button id="btnTypingTestToggle" class="typing-speed-pill-btn" aria-label="Test Your Typing Speed (30s / 60s Focus Challenge)" title="Test Your Typing Speed">
+            <span class="typing-pill-icon">⌨️</span>
+            <span class="typing-pill-text">Typing Speed</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Center Stage: Hupti Avatar -->
+    <section class="avatar-stage">
+      <div id="huptiContainer" class="avatar-wrapper">
+        <svg id="huptiAvatar" class="hupti-avatar-svg" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Body Gradient (Light Mode) -->
+            <radialGradient id="huptiBodyGradient" cx="45%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#FFFFFF"/>
+              <stop offset="60%" stop-color="#FFF3F7"/>
+              <stop offset="100%" stop-color="#FFE4EE"/>
+            </radialGradient>
+
+            <!-- Body Gradient (Dark Mode) -->
+            <radialGradient id="huptiBodyDarkGradient" cx="45%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#FAF5FF"/>
+              <stop offset="65%" stop-color="#EADBFF"/>
+              <stop offset="100%" stop-color="#D5BFFF"/>
+            </radialGradient>
+
+            <!-- Soft Blush Glow Gradient -->
+            <radialGradient id="blushRadialGradient" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FF5A82" stop-opacity="0.8"/>
+              <stop offset="50%" stop-color="#FF83A0" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#FFA4BA" stop-opacity="0"/>
+            </radialGradient>
+
+            <!-- Pupil Rich Depth Gradient -->
+            <linearGradient id="pupilGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#2D1F38"/>
+              <stop offset="70%" stop-color="#3F2A52"/>
+              <stop offset="100%" stop-color="#674780"/>
+            </linearGradient>
+
+            <!-- Iris Inner Rim Reflection -->
+            <linearGradient id="irisRimGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#B284D1" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#FF8DA1" stop-opacity="0.4"/>
+            </linearGradient>
+
+            <!-- Soft Outer Glow -->
+            <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#FF8DA1" flood-opacity="0.22"/>
+            </filter>
+          </defs>
+
+          <!-- Hupti Body Silhouette (Soft squishy organic pear/marshmallow) -->
+          <path id="huptiBody" class="hupti-body-path" d="
+            M 110 32
+            C 160 32, 192 70, 194 116
+            C 196 160, 168 198, 110 198
+            C 52 198, 24 160, 26 116
+            C 28 70, 60 32, 110 32
+            Z
+          "/>
+
+          <!-- Head Accessory Container -->
+          <g id="headSprout" transform="translate(108, 30)">
+            <g id="headAccessoryContent">
+              <path d="M 0 0 C -2 -7, 0 -13, 2 -16" stroke="#70C1B3" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+              <path d="M 0 -7 C -5 -9, -6 -14, -1 -12 Z" fill="#8CE0D0"/>
+              <!-- 5-petal flower blossom matching brand logo -->
+              <g transform="translate(2, -18) scale(0.65)">
+                <circle cx="0" cy="-8" r="5.2" fill="#FFA5BA"/>
+                <circle cx="7.6" cy="-2.5" r="5.2" fill="#FF83A0"/>
+                <circle cx="4.7" cy="6.5" r="5.2" fill="#FFA5BA"/>
+                <circle cx="-4.7" cy="6.5" r="5.2" fill="#FF83A0"/>
+                <circle cx="-7.6" cy="-2.5" r="5.2" fill="#FFA5BA"/>
+                <circle cx="0" cy="0" r="4.2" fill="#FFD166"/>
+                <circle cx="-1.2" cy="-1.2" r="1.3" fill="#FFFBE6"/>
+              </g>
+            </g>
+          </g>
+
+          <!-- Cheeks / Blush Layer -->
+          <g id="blushLayer">
+            <!-- Left Cheek -->
+            <circle id="blushL" class="hupti-blush" cx="50" cy="136" r="14"/>
+            <line class="hupti-blush-mark" x1="43" y1="133" x2="40" y2="139"/>
+            <line class="hupti-blush-mark" x1="49" y1="133" x2="46" y2="139"/>
+            <line class="hupti-blush-mark" x1="55" y1="133" x2="52" y2="139"/>
+
+            <!-- Right Cheek -->
+            <circle id="blushR" class="hupti-blush" cx="170" cy="136" r="14"/>
+            <line class="hupti-blush-mark" x1="165" y1="133" x2="168" y2="139"/>
+            <line class="hupti-blush-mark" x1="171" y1="133" x2="174" y2="139"/>
+            <line class="hupti-blush-mark" x1="177" y1="133" x2="180" y2="139"/>
+          </g>
+
+          <!-- Left Eye Group -->
+          <g id="eyeL" class="hupti-eye-group">
+            <g class="hupti-eye-lid">
+              <!-- Sclera -->
+              <ellipse class="hupti-eye-sclera" cx="74" cy="108" rx="19" ry="24"/>
+              
+              <!-- Pupil with Lerp Mouse Tracking -->
+              <g class="hupti-pupil-group">
+                <ellipse class="hupti-pupil" cx="74" cy="109" rx="14" ry="18"/>
+                <ellipse cx="74" cy="116" rx="9" ry="6" fill="url(#irisRimGradient)"/>
+                <!-- Shiny highlights -->
+                <circle class="hupti-pupil-sparkle" cx="69" cy="99" r="6"/>
+                <circle class="hupti-pupil-sparkle" cx="79" cy="118" r="2.8"/>
+                <circle class="hupti-pupil-sparkle" cx="76" cy="103" r="1.6"/>
+              </g>
+
+              <!-- Eyelashes -->
+              <path class="hupti-lash" d="M 58 98 Q 63 90 73 87"/>
+              <path class="hupti-lash" d="M 82 89 Q 89 87 94 92"/>
+            </g>
+
+            <!-- Happy Crescent Eye (shown when Happy) -->
+            <path class="hupti-happy-eye" d="M 58 114 Q 74 94 90 114" style="opacity: 0;"/>
+            <!-- Sleep Eye Arc (shown when Sleeping) -->
+            <path class="hupti-sleep-eye" d="M 59 110 Q 74 122 89 110" style="opacity: 0;"/>
+            <!-- Sad Tear (shown when Sad) -->
+            <path class="hupti-tear-drop" d="M 57 122 Q 54 129 57 134 Q 61 129 57 122" fill="#89CFF0" style="opacity: 0;"/>
+          </g>
+
+          <!-- Right Eye Group -->
+          <g id="eyeR" class="hupti-eye-group">
+            <g class="hupti-eye-lid">
+              <!-- Sclera -->
+              <ellipse class="hupti-eye-sclera" cx="146" cy="108" rx="19" ry="24"/>
+
+              <!-- Pupil with Lerp Mouse Tracking -->
+              <g class="hupti-pupil-group">
+                <ellipse class="hupti-pupil" cx="146" cy="109" rx="14" ry="18"/>
+                <ellipse cx="146" cy="116" rx="9" ry="6" fill="url(#irisRimGradient)"/>
+                <!-- Shiny highlights -->
+                <circle class="hupti-pupil-sparkle" cx="141" cy="99" r="6"/>
+                <circle class="hupti-pupil-sparkle" cx="151" cy="118" r="2.8"/>
+                <circle class="hupti-pupil-sparkle" cx="148" cy="103" r="1.6"/>
+              </g>
+
+              <!-- Eyelashes -->
+              <path class="hupti-lash" d="M 162 98 Q 157 90 147 87"/>
+              <path class="hupti-lash" d="M 138 89 Q 131 87 126 92"/>
+            </g>
+
+            <!-- Happy Crescent Eye (shown when Happy) -->
+            <path class="hupti-happy-eye" d="M 130 114 Q 146 94 162 114" style="opacity: 0;"/>
+            <!-- Sleep Eye Arc (shown when Sleeping) -->
+            <path class="hupti-sleep-eye" d="M 131 110 Q 146 122 161 110" style="opacity: 0;"/>
+            <!-- Sad Tear (shown when Sad) -->
+            <path class="hupti-tear-drop" d="M 163 122 Q 166 129 163 134 Q 159 129 163 122" fill="#89CFF0" style="opacity: 0;"/>
+          </g>
+
+          <!-- Wireframe Study Glasses (Worn during Focus or via Wardrobe) -->
+          <g id="accessoryGlasses" class="hupti-glasses-group" style="display: none;">
+            <!-- Left Rim -->
+            <circle cx="74" cy="110" r="23" fill="rgba(255, 255, 255, 0.08)" stroke="#583C4F" stroke-width="2.6"/>
+            <path d="M 60 97 A 23 23 0 0 1 88 97" fill="none" stroke="rgba(255, 255, 255, 0.65)" stroke-width="2.2" stroke-linecap="round"/>
+            <!-- Right Rim -->
+            <circle cx="146" cy="110" r="23" fill="rgba(255, 255, 255, 0.08)" stroke="#583C4F" stroke-width="2.6"/>
+            <path d="M 132 97 A 23 23 0 0 1 160 97" fill="none" stroke="rgba(255, 255, 255, 0.65)" stroke-width="2.2" stroke-linecap="round"/>
+            <!-- Bridge -->
+            <path d="M 97 110 Q 110 105 123 110" fill="none" stroke="#583C4F" stroke-width="2.6" stroke-linecap="round"/>
+            <!-- Left & Right Temples -->
+            <path d="M 51 110 Q 42 108 34 114" fill="none" stroke="#583C4F" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M 169 110 Q 178 108 186 114" fill="none" stroke="#583C4F" stroke-width="2.2" stroke-linecap="round"/>
+          </g>
+
+          <!-- Responsive Animated Mouth -->
+          <g id="mouthGroup">
+            <path id="huptiMouth" class="hupti-mouth-path" d="M 96 142 Q 103 147 110 143 Q 117 147 124 142" fill="none" stroke="#5A3D4A"/>
+            <path id="huptiTongue" class="hupti-mouth-tongue" d="M 103 152 Q 110 160 117 152 Z" style="opacity: 0;"/>
+          </g>
+
+          <!-- Invisible Interactive Hit Zones -->
+          <!-- Forehead zone for gentle petting and purring -->
+          <path id="hitForehead" class="hit-zone forehead" d="M 60 40 C 90 35, 130 35, 160 40 C 160 85, 60 85, 60 40 Z"/>
+          <!-- Left Cheek zone for poking -->
+          <circle id="hitCheekL" class="hit-zone cheek" cx="50" cy="136" r="24"/>
+          <!-- Right Cheek zone for poking -->
+          <circle id="hitCheekR" class="hit-zone cheek" cx="170" cy="136" r="24"/>
+        </svg>
+      </div>
+
+      <!-- Dialogue / Subtitle Box -->
+      <article class="dialogue-card" aria-live="polite">
+        <header class="dialogue-header">
+          <div class="dialogue-speaker">
+            <span class="pulse-dot"></span> Hupti
+          </div>
+          <div class="treat-counter-tag">
+            <span>🍬 Treats Enjoyed:</span>
+            <strong id="treatsCounter">0</strong>
+          </div>
+        </header>
+        <div class="dialogue-content">
+          <p id="dialogueText" class="dialogue-text">Just observing the world... got a moment to hang out?</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- Bottom Controls & Safe Non-Overlapping Feedback Row -->
+    <footer class="bottom-controls-footer">
+      <nav id="controlsContainer" class="controls-wrapper" aria-label="Hupti Action Controls">
+        <!-- 1. Pet Button -->
+        <button id="btnPet" class="action-pill" aria-label="Pet Hupti (Shortcut: P)" title="Pet Hupti (Shortcut: P)">
+          <span class="pill-icon">💖</span>
+          <span class="pill-label">Pet</span>
+          <span class="key-hint">P</span>
+        </button>
+
+        <!-- 2. Poke Button -->
+        <button id="btnPoke" class="action-pill" aria-label="Poke Hupti (Shortcut: K)" title="Poke Hupti (Shortcut: K)">
+          <span class="pill-icon">👉</span>
+          <span class="pill-label">Poke</span>
+          <span class="key-hint">K</span>
+        </button>
+
+        <!-- 3. Hug Button -->
+        <button id="btnHug" class="action-pill" aria-label="Hug Hupti (Shortcut: H)" title="Hug Hupti (Shortcut: H)">
+          <span class="pill-icon">🤗</span>
+          <span class="pill-label">Hug</span>
+          <span class="key-hint">H</span>
+        </button>
+
+        <!-- 4. Sleep / Wake Button -->
+        <button id="btnSleepWake" class="action-pill" aria-label="Put Hupti to sleep or wake up (Shortcut: Z or W)" title="Put to sleep or wake up (Shortcut: Z or W)">
+          <span id="btnSleepIcon" class="pill-icon">💤</span>
+          <span id="btnSleepLabel" class="pill-label">Sleep</span>
+          <span id="btnSleepKey" class="key-hint">Z</span>
+        </button>
+
+        <!-- 5. Scold Button -->
+        <button id="btnScold" class="action-pill" aria-label="Gentle rebuke for Hupti (Shortcut: S)" title="Gentle rebuke (Shortcut: S)">
+          <span class="pill-icon">😠</span>
+          <span class="pill-label">Scold</span>
+          <span class="key-hint">S</span>
+        </button>
+
+        <!-- 6. Treat Button -->
+        <button id="btnTreat" class="action-pill" aria-label="Give Hupti a treat (Shortcut: T)" title="Give Hupti a treat (Shortcut: T)">
+          <span class="pill-icon">🍬</span>
+          <span class="pill-label">Treat</span>
+          <span class="key-hint">T</span>
+        </button>
+      </nav>
+
+      <!-- Feedback Pill Positioned with Safe Clearance Below Controls -->
+      <div class="feedback-row">
+        <button id="btnOpenFeedback" class="floating-feedback-pill" aria-label="Share your love and feedback for Hupti" title="Share your love &amp; feedback for Hupti">
+          <span class="feedback-icon">💬</span> How much do you like Hupti? Let us know!
+        </button>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Minimalist About Creator Capsule (Absolute Bottom-Left Viewport) -->
+  <button id="btnAboutCreator" class="about-creator-pill" aria-label="About Creator (Redwanul Islam Rimon)" title="About Creator">
+    <span class="creator-pill-icon">✨</span>
+    <span>About Creator</span>
+  </button>
+
+  <!-- 0. Welcome & Name Introduction Modal -->
+  <div id="welcomeModal" class="modal-overlay welcome-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+    <div class="modal-card welcome-card">
+      <div class="welcome-header">
+        <div class="welcome-flower-icon">
+          <!-- Hupti's Signature Flower Blossom -->
+          <svg width="48" height="48" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="8.5" r="5.2" fill="#FF7B99"/>
+            <circle cx="22.5" cy="13.5" r="5.2" fill="#FF8DA1"/>
+            <circle cx="20" cy="21.5" r="5.2" fill="#FFA5BA"/>
+            <circle cx="12" cy="21.5" r="5.2" fill="#FF8DA1"/>
+            <circle cx="9.5" cy="13.5" r="5.2" fill="#FFA5BA"/>
+            <circle cx="16" cy="16" r="4.2" fill="#FFD166"/>
+            <circle cx="14.8" cy="14.8" r="1.3" fill="#FFFBE6"/>
+          </svg>
+        </div>
+        <h2 id="welcomeTitle">🌸 Hello! I'm Hupti. What should I call you?</h2>
+        <p class="welcome-subtext">Your cute, expressive companion for study and focus.</p>
+      </div>
+      <form id="welcomeNameForm" class="welcome-form">
+        <div class="welcome-input-wrapper">
+          <input 
+            type="text" 
+            id="userNameInput" 
+            class="welcome-input" 
+            placeholder="Enter your name..." 
+            maxlength="28" 
+            autocomplete="name"
+            required 
+          />
+        </div>
+        <button type="submit" id="btnSubmitName" class="btn-welcome-submit" aria-label="Save your name and meet Hupti" title="Meet Hupti">
+          <span>Meet Hupti ✨</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Help & Shortcuts Modal -->
+  <div id="helpModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="modalTitle">Interacting with Hupti</h2>
+        <button id="btnCloseModal" class="modal-close" aria-label="Close dialog" title="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="help-section">
+          <div class="shortcuts-header-row">
+            <h3>Keyboard Shortcuts</h3>
+            <div class="shortcuts-toggle-wrapper">
+              <label class="switch-toggle" for="toggleShortcutsCheckbox" title="Toggle Keyboard Shortcuts On or Off">
+                <input type="checkbox" id="toggleShortcutsCheckbox" checked aria-label="Toggle Keyboard Shortcuts On or Off">
+                <span class="switch-slider"></span>
+              </label>
+              <span id="shortcutsStatusText" class="shortcuts-status-text">On</span>
+            </div>
+          </div>
+          <div class="shortcut-grid">
+            <div class="shortcut-item">
+              <span>Pet / Stroke</span>
+              <span class="key-hint">P</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Poke / Tease</span>
+              <span class="key-hint">K</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Boop</span>
+              <span class="key-hint">B</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Warm Hug</span>
+              <span class="key-hint">H</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Give Treat</span>
+              <span class="key-hint">T</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Scold / Rebuke</span>
+              <span class="key-hint">S</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Put to Sleep</span>
+              <span class="key-hint">Z</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Wake Up</span>
+              <span class="key-hint">W</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Toggle Mute</span>
+              <span class="key-hint">M</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Floating Mini Window</span>
+              <span class="key-hint">O</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Wardrobe &amp; Themes</span>
+              <span class="key-hint">C</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="help-section">
+          <h3>Direct Gestures (Mouse & Touch)</h3>
+          <div class="gesture-list">
+            <div class="gesture-item">
+              <span class="gesture-icon">⤢</span>
+              <span><strong>Floating Companion:</strong> Click the PiP icon in the header to float Hupti over other tabs and desktop apps!</span>
+            </div>
+            <div class="gesture-item">
+              <span class="gesture-icon">✨</span>
+              <span><strong>Pupil Tracking:</strong> Hupti's curious eyes follow your cursor as you move around.</span>
+            </div>
+            <div class="gesture-item">
+              <span class="gesture-icon">💖</span>
+              <span><strong>Stroke Forehead:</strong> Click or stroke back and forth across her forehead to make her purr and blush.</span>
+            </div>
+            <div class="gesture-item">
+              <span class="gesture-icon">👉</span>
+              <span><strong>Pinch / Tap Cheeks:</strong> Tap her squishy cheeks to surprise or tease her.</span>
+            </div>
+            <div class="gesture-item">
+              <span class="gesture-icon">💤</span>
+              <span><strong>Wake Gentle Tap:</strong> Tap anywhere on Hupti when she is sleeping to gently wake her.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="help-section help-profile-section">
+          <h3>👤 Companion Profile</h3>
+          <div class="profile-name-row">
+            <span>Human Friend: <strong id="currentUserNameDisplay">Friend</strong></span>
+            <button type="button" id="btnChangeName" class="btn-change-name" aria-label="Change what Hupti calls you" title="Change what Hupti calls you">✏️ Change Name</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback & Rating Modal -->
+  <div id="feedbackModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+    <div class="modal-card feedback-card">
+      <div class="modal-header">
+        <h2 id="feedbackTitle">Share your love &amp; feedback for Hupti 🌸</h2>
+        <button id="btnCloseFeedback" class="modal-close" aria-label="Close dialog" title="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="feedbackForm" class="feedback-form">
+          <!-- Honeypot field for spam bots -->
+          <input type="checkbox" name="botcheck" class="hidden" style="display: none;" aria-hidden="true" tabindex="-1">
+
+          <!-- Star Rating -->
+          <div class="feedback-field">
+            <label class="feedback-label">Your Rating:</label>
+            <div class="star-rating" id="starRating" role="radiogroup" aria-label="Star Rating">
+              <span class="star-btn active" data-value="1" title="1 Star - Needs work">★</span>
+              <span class="star-btn active" data-value="2" title="2 Stars - Cute">★</span>
+              <span class="star-btn active" data-value="3" title="3 Stars - Really sweet!">★</span>
+              <span class="star-btn active" data-value="4" title="4 Stars - Love Hupti!">★</span>
+              <span class="star-btn active" data-value="5" title="5 Stars - Absolutely adore Hupti! 💖">★</span>
+            </div>
+            <span id="starRatingLabel" class="star-rating-label">5 Stars — Absolutely adore Hupti! 💖</span>
+            <input type="hidden" id="ratingInput" name="rating" value="5" />
+          </div>
+
+          <!-- User Email -->
+          <div class="feedback-field">
+            <label for="feedbackEmail" class="feedback-label">Your Email Address <span class="required">*</span></label>
+            <input type="email" id="feedbackEmail" name="email" class="feedback-input" required placeholder="your.name@example.com" />
+          </div>
+
+          <!-- Feedback Message -->
+          <div class="feedback-field">
+            <label for="feedbackMessage" class="feedback-label">Tell us how Hupti made you feel... <span class="required">*</span></label>
+            <textarea id="feedbackMessage" name="message" class="feedback-textarea" rows="3" required placeholder="Share your experience, warmth, or suggestions for Hupti..."></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="btnSubmitFeedback" class="feedback-submit-btn" aria-label="Send Feedback to Creator" title="Send Feedback 💌">
+            <span id="submitBtnText">Send Feedback 💌</span>
+          </button>
+
+          <!-- Friendly Error Banner (Shown on network failure) -->
+          <div id="feedbackErrorBanner" class="feedback-error-banner" style="display: none;" role="alert"></div>
+        </form>
+
+        <!-- Success Confirmation State -->
+        <div id="feedbackSuccessState" class="feedback-success" style="display: none;">
+          <div class="success-icon">💖</div>
+          <h3>Thank you for your feedback!</h3>
+          <p>Hupti is sending you lots of love! 💖</p>
+          <button id="btnFeedbackDone" class="action-pill" style="margin-top: 1.25rem;" aria-label="Back to Hupti" title="Back to Hupti">Back to Hupti 🌸</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. Pomodoro Study Companion Modal -->
+  <div id="pomodoroModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="pomodoroTitle">
+    <div class="modal-card pomodoro-card">
+      <div class="modal-header">
+        <h2 id="pomodoroTitle">🍅 Pomodoro Study Companion</h2>
+        <button id="btnClosePomodoro" class="modal-close" aria-label="Close dialog" title="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body pomodoro-modal-body">
+        <div class="pomodoro-mode-switcher">
+          <button id="btnModeFocus" class="pomodoro-tab active" aria-label="Select Focus mode (25 minutes)" title="Focus Mode (25m)">🎯 Focus (25m)</button>
+          <button id="btnModeBreak" class="pomodoro-tab" aria-label="Select Rest Break mode (5 minutes)" title="Rest Break (5m)">☕ Rest Break (5m)</button>
+        </div>
+
+        <div class="pomodoro-timer-display" id="pomodoroBigDisplay">
+          <span id="pomoMinutes">25</span>:<span id="pomoSeconds">00</span>
+        </div>
+
+        <div class="pomodoro-status-tag" id="pomodoroStatusLabel">
+          Ready for your next study sprint!
+        </div>
+
+        <div class="pomodoro-controls-row">
+          <button id="btnPomoStartPause" class="pomodoro-action-btn primary" aria-label="Start or pause Pomodoro timer" title="Start or pause timer">
+            <span id="pomoStartIcon">▶️</span> <span id="pomoStartText">Start Focus</span>
+          </button>
+          <button id="btnPomoReset" class="pomodoro-action-btn secondary" aria-label="Reset Pomodoro timer to beginning" title="Reset timer to beginning">
+            🔄 Reset
+          </button>
+          <button id="btnPomoSkip" class="pomodoro-action-btn secondary" aria-label="Skip to next Pomodoro session" title="Skip to next session">
+            ⏭️ Skip
+          </button>
+        </div>
+
+        <div class="pomodoro-meta-box">
+          <div class="pomodoro-stat-item">
+            <span>Sessions Completed Today:</span>
+            <strong id="pomoCompletedCount" class="stat-highlight">⭐️ 0</strong>
+          </div>
+          <label class="pomodoro-test-toggle" title="Shortens focus to 60s and break to 15s for quick testing">
+            <input type="checkbox" id="checkPomoTest" />
+            <span>⚡ 1-Minute Quick Test Mode</span>
+          </label>
+        </div>
+
+        <div class="pomodoro-hint-note">
+          🌸 <em>During focus mode, Hupti puts on her tiny wireframe glasses and studies quietly beside you. When you complete a session, she celebrates and reminds you to hydrate and stretch!</em>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Procedural Ambient Lo-Fi / Rain Soundscapes Modal -->
+  <div id="ambientModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="ambientTitle">
+    <div class="modal-card ambient-card">
+      <div class="modal-header">
+        <h2 id="ambientTitle">🎧 Ambient Study Soundscapes</h2>
+        <button id="btnCloseAmbient" class="modal-close" aria-label="Close dialog" title="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body ambient-modal-body">
+        <p class="ambient-description">
+          Organic ambient study environments generated in real-time via the <strong>Web Audio API</strong>. 100% procedural, infinite, and zero external audio files.
+        </p>
+
+        <!-- Quick Ambient Modes Toggle Bar (Complete 14 Tracks) -->
+        <div class="ambient-quick-tabs" id="ambientQuickTabs">
+          <button type="button" class="ambient-tab-btn active" data-ambient="rain" aria-label="Play Gentle Rain soundscape" title="Gentle Rain">🌧️ Rain</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="coffeeshop" aria-label="Play Cozy Lo-Fi soundscape" title="Cozy Lo-Fi">☕ Cozy Lo-Fi</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="forest" aria-label="Play Forest Night Breeze soundscape" title="Forest Breeze">🌲 Forest</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="zen" aria-label="Play Zen Meditation Chimes soundscape" title="Zen Chimes">🔔 Zen Chimes</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="ocean" aria-label="Play Gentle Ocean Waves soundscape" title="Ocean Waves">🌊 Ocean</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="midnight" aria-label="Play Midnight Study Lo-Fi soundscape" title="Midnight Lo-Fi">🌙 Midnight</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="hearth" aria-label="Play Purr and Hearth soundscape" title="Purr &amp; Hearth">🔥 Hearth</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="meadow" aria-label="Play Summer Night Meadow soundscape" title="Night Meadow">🌾 Meadow</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="bamboo_flute" aria-label="Play Morning Bamboo Flute soundscape" title="Bamboo Flute">🎋 Bamboo Flute</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="acoustic_guitar" aria-label="Play Fireside Acoustic Guitar soundscape" title="Acoustic Guitar">🎸 Acoustic Guitar</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="piano_harmonium" aria-label="Play Piano and Harmonium Bloom soundscape" title="Piano &amp; Harmonium">🎹 Piano &amp; Harmonium</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="kyoto_temple" aria-label="Play Kyoto Temple Rain soundscape" title="Kyoto Temple">⛩️ Kyoto Temple</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="latenight_lofi" aria-label="Play Late Night Beats soundscape" title="Late Night Beats">🎧 Late Night Beats</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="nordic_brook" aria-label="Play Nordic Pines and Brook soundscape" title="Nordic Brook">🏞️ Nordic Brook</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="off" aria-label="Turn off ambient soundscape" title="Music Off">🎵 Music: Off</button>
+        </div>
+
+        <div class="ambient-grid">
+          <!-- 1. Rain -->
+          <div class="ambient-option active" data-ambient="rain">
+            <div class="ambient-icon">🌧️</div>
+            <div class="ambient-info">
+              <h4>Gentle Rain</h4>
+              <p>Soft rainfall and delicate drops tapping against a cozy window pane.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 2. Coffee Shop Lo-Fi -->
+          <div class="ambient-option" data-ambient="coffeeshop">
+            <div class="ambient-icon">☕</div>
+            <div class="ambient-info">
+              <h4>Cozy Coffee Shop Lo-Fi</h4>
+              <p>Warm vinyl crackle, mellow electric piano chords, soft low-tempo beat.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 3. Forest Breeze -->
+          <div class="ambient-option" data-ambient="forest">
+            <div class="ambient-icon">🌲</div>
+            <div class="ambient-info">
+              <h4>Forest Night Breeze</h4>
+              <p>Subtle nocturnal ambiance, distant wind rustle, gentle night crickets.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 4. Zen Chimes -->
+          <div class="ambient-option" data-ambient="zen">
+            <div class="ambient-icon">🔔</div>
+            <div class="ambient-info">
+              <h4>Zen Meditation Chimes</h4>
+              <p>Slow, resonant Tibetan singing-bowl chimes with smooth atmospheric drone.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 5. Gentle Ocean Waves -->
+          <div class="ambient-option" data-ambient="ocean">
+            <div class="ambient-icon">🌊</div>
+            <div class="ambient-info">
+              <h4>Gentle Ocean Waves</h4>
+              <p>Soothing, rhythmic distant sea waves breaking softly on the shore.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 6. Midnight Study Lo-Fi -->
+          <div class="ambient-option" data-ambient="midnight">
+            <div class="ambient-icon">🌙</div>
+            <div class="ambient-info">
+              <h4>Midnight Study Lo-Fi</h4>
+              <p>Mellow Rhodes keys, vinyl fuzz, and a slow, relaxing chill-hop groove.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 7. Purr & Hearth -->
+          <div class="ambient-option" data-ambient="hearth">
+            <div class="ambient-icon">🔥</div>
+            <div class="ambient-info">
+              <h4>Purr &amp; Hearth</h4>
+              <p>Soft crackling wood fire combined with a gentle, rhythmic ambient cat purr.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 8. Summer Night Meadow -->
+          <div class="ambient-option" data-ambient="meadow">
+            <div class="ambient-icon">🌾</div>
+            <div class="ambient-info">
+              <h4>Summer Night Meadow</h4>
+              <p>Warm night ambience with distant rustling leaves and gentle crickets.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 9. Peaceful Morning Bamboo Flute -->
+          <div class="ambient-option" data-ambient="bamboo_flute">
+            <div class="ambient-icon">🎋</div>
+            <div class="ambient-info">
+              <h4>Morning Bamboo Flute</h4>
+              <p>Soft, airy, and soul-touching bamboo flute melody with natural breeze (বাঁশির মিষ্টি সুর).</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 10. Cozy Fireside Acoustic Guitar -->
+          <div class="ambient-option" data-ambient="acoustic_guitar">
+            <div class="ambient-icon">🎸</div>
+            <div class="ambient-info">
+              <h4>Fireside Acoustic Guitar</h4>
+              <p>Gentle, warm acoustic fingerpicked nylon/steel chords in a repetitive slow melody.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 11. Meditative Piano & Soft Harmonium Bloom -->
+          <div class="ambient-option" data-ambient="piano_harmonium">
+            <div class="ambient-icon">🎹</div>
+            <div class="ambient-info">
+              <h4>Piano &amp; Harmonium Bloom</h4>
+              <p>Minimalist acoustic piano notes blended over a warm, tranquil harmonium drone.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 12. Kyoto Temple Rain & Bamboo Bell -->
+          <div class="ambient-option" data-ambient="kyoto_temple">
+            <div class="ambient-icon">⛩️</div>
+            <div class="ambient-info">
+              <h4>Kyoto Temple Rain</h4>
+              <p>Raindrops tapping on cedar veranda tiles with subtle, resonant bamboo bells.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 13. Late Night Midnight Lo-Fi Beats -->
+          <div class="ambient-option" data-ambient="latenight_lofi">
+            <div class="ambient-icon">🎧</div>
+            <div class="ambient-info">
+              <h4>Late Night Lo-Fi Beats</h4>
+              <p>Deep Rhodes chords, silky bassline, subtle vinyl scratch, and relaxing 70 BPM tempo.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 14. Starry Nordic Pines & Flowing Brook -->
+          <div class="ambient-option" data-ambient="nordic_brook">
+            <div class="ambient-icon">🏞️</div>
+            <div class="ambient-info">
+              <h4>Nordic Pines &amp; Brook</h4>
+              <p>Pristine mountain stream water splashing over stones with a nocturnal wind.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+        </div>
+
+        <!-- Volume & Playback Controls -->
+        <div class="ambient-controls-box">
+          <div class="ambient-volume-row">
+            <span class="ambient-vol-icon">🔉</span>
+            <input type="range" id="ambientVolumeSlider" min="0" max="100" value="50" class="ambient-slider" />
+            <span id="ambientVolumeLabel" class="ambient-vol-label">50%</span>
+          </div>
+
+          <button id="btnAmbientTogglePlay" class="ambient-play-btn" aria-label="Play or pause ambient soundscape" title="Play or pause soundscape">
+            <span id="ambientPlayIcon">▶️</span> <span id="ambientPlayText">Play Soundscape</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Wardrobe & Themes Customization Modal -->
+  <div id="wardrobeModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="wardrobeTitle">
+    <div class="modal-card wardrobe-card">
+      <div class="modal-header">
+        <h2 id="wardrobeTitle">🎀 Hupti's Wardrobe &amp; Themes</h2>
+        <button id="btnCloseWardrobe" class="modal-close" aria-label="Close dialog" title="Close dialog">&times;</button>
+      </div>
+
+      <!-- Wardrobe Category Navigation Tabs -->
+      <div class="wardrobe-tabs-nav" id="wardrobeTabsNav">
+        <button type="button" class="wardrobe-tab-btn active" data-tab="accessories" aria-label="Switch to Accessories tab" title="Accessories">🌸 Accessories</button>
+        <button type="button" class="wardrobe-tab-btn" data-tab="colors" aria-label="Switch to Body Colors tab" title="Body Colors">🎨 Body Colors</button>
+        <button type="button" class="wardrobe-tab-btn" data-tab="backgrounds" aria-label="Switch to Ambient Backgrounds tab" title="Backgrounds">🖼️ Backgrounds</button>
+      </div>
+
+      <div class="modal-body wardrobe-modal-body">
+        
+        <!-- Tab Pane 1: Accessories -->
+        <div class="wardrobe-tab-pane active" id="tabPaneAccessories">
+          <!-- Section A: Head Accessories -->
+          <div class="wardrobe-section">
+            <h3>🌸 Head Blossom</h3>
+            <div class="wardrobe-grid" id="accessoryGrid">
+              <div class="wardrobe-item active" data-accessory="sakura">
+                <span class="wardrobe-emoji">🌸</span>
+                <span class="wardrobe-label">Sakura</span>
+              </div>
+              <div class="wardrobe-item" data-accessory="sunflower">
+                <span class="wardrobe-emoji">🌻</span>
+                <span class="wardrobe-label">Sunflower</span>
+              </div>
+              <div class="wardrobe-item" data-accessory="snowdrop">
+                <span class="wardrobe-emoji">❄️</span>
+                <span class="wardrobe-label">Snowdrop</span>
+              </div>
+              <div class="wardrobe-item" data-accessory="sprout">
+                <span class="wardrobe-emoji">🌱</span>
+                <span class="wardrobe-label">Sprout</span>
+              </div>
+              <div class="wardrobe-item" data-accessory="gradcap">
+                <span class="wardrobe-emoji">🎓</span>
+                <span class="wardrobe-label">Scholar</span>
+              </div>
+              <div class="wardrobe-item" data-accessory="ribbon">
+                <span class="wardrobe-emoji">🎀</span>
+                <span class="wardrobe-label">Ribbon</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section B: Eyewear -->
+          <div class="wardrobe-section">
+            <h3>👓 Eyewear</h3>
+            <label class="glasses-toggle-card">
+              <input type="checkbox" id="checkWardrobeGlasses" />
+              <div class="glasses-toggle-info">
+                <span class="glasses-emoji">🤓</span>
+                <div>
+                  <strong>Wireframe Study Glasses</strong>
+                  <p>Wear tiny chic glasses anytime (automatically worn during Pomodoro focus).</p>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Tab Pane 2: Body Colors -->
+        <div class="wardrobe-tab-pane" id="tabPaneColors">
+          <div class="wardrobe-section">
+            <h3>🎨 Body Color Tints</h3>
+            <div class="tint-grid" id="tintGrid">
+              <button class="tint-swatch active" data-tint="strawberry" aria-label="Select Strawberry Cream body color" title="Strawberry Cream (Default)">
+                <span class="swatch-circle tint-strawberry-preview"></span>
+                <span class="swatch-label">Strawberry</span>
+              </button>
+              <button class="tint-swatch" data-tint="lavender" aria-label="Select Lavender Twilight body color" title="Lavender Twilight">
+                <span class="swatch-circle tint-lavender-preview"></span>
+                <span class="swatch-label">Lavender</span>
+              </button>
+              <button class="tint-swatch" data-tint="sage" aria-label="Select Mint Sage body color" title="Mint Sage">
+                <span class="swatch-circle tint-sage-preview"></span>
+                <span class="swatch-label">Mint Sage</span>
+              </button>
+              <button class="tint-swatch" data-tint="peach" aria-label="Select Honey Peach body color" title="Honey Peach">
+                <span class="swatch-circle tint-peach-preview"></span>
+                <span class="swatch-label">Honey Peach</span>
+              </button>
+              <button class="tint-swatch" data-tint="sky" aria-label="Select Sky Blue body color" title="Sky Blue">
+                <span class="swatch-circle tint-sky-preview"></span>
+                <span class="swatch-label">Sky Blue</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Pane 3: Ambient Background Presets -->
+        <div class="wardrobe-tab-pane" id="tabPaneBackgrounds">
+          <div class="wardrobe-section">
+            <h3>🖼️ Desk Ambient Backgrounds</h3>
+            <p class="wardrobe-section-desc">Choose a soothing ambient aesthetic for your space. Saved automatically.</p>
+            <div class="bg-theme-grid" id="bgThemeGrid">
+              
+              <!-- 1. Default Pastel -->
+              <div class="bg-theme-card active" data-bg="default">
+                <div class="bg-card-preview bg-preview-default"></div>
+                <div class="bg-card-info">
+                  <h4>Default Pastel</h4>
+                  <p>Classic soft cozy neutral</p>
+                </div>
+                <span class="bg-card-check">✔</span>
+              </div>
+
+              <!-- 2. Sunflower Glow -->
+              <div class="bg-theme-card" data-bg="sunflower">
+                <div class="bg-card-preview bg-preview-sunflower"></div>
+                <div class="bg-card-info">
+                  <h4>Sunflower Glow</h4>
+                  <p>Warm golden-hour gentle floral ambiance</p>
+                </div>
+                <span class="bg-card-check">✔</span>
+              </div>
+
+              <!-- 3. Cherry Blossom -->
+              <div class="bg-theme-card" data-bg="sakura">
+                <div class="bg-card-preview bg-preview-sakura"></div>
+                <div class="bg-card-info">
+                  <h4>Cherry Blossom (Sakura)</h4>
+                  <p>Soft spring blush pink with subtle petal hints</p>
+                </div>
+                <span class="bg-card-check">✔</span>
+              </div>
+
+              <!-- 4. Rainy Drizzle -->
+              <div class="bg-theme-card" data-bg="rainy">
+                <div class="bg-card-preview bg-preview-rainy"></div>
+                <div class="bg-card-info">
+                  <h4>Rainy Drizzle</h4>
+                  <p>Calming muted slate-blue rainy mood</p>
+                </div>
+                <span class="bg-card-check">✔</span>
+              </div>
+
+              <!-- 5. Twilight Horizon -->
+              <div class="bg-theme-card" data-bg="twilight">
+                <div class="bg-card-preview bg-preview-twilight"></div>
+                <div class="bg-card-info">
+                  <h4>Twilight Horizon</h4>
+                  <p>Serene evening purple &amp; soft rose hues</p>
+                </div>
+                <span class="bg-card-check">✔</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Taskbox Planner & Smart Reminders Modal -->
+  <div id="taskboxModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="taskboxTitle">
+    <div class="modal-card taskbox-card">
+      <div class="modal-header">
+        <h2 id="taskboxTitle">📝 Taskbox Planner &amp; Reminders</h2>
+        <button id="btnCloseTaskbox" class="modal-close" aria-label="Close dialog" title="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body taskbox-modal-body">
+        <p class="taskbox-subtitle">
+          Plan your focus sessions. Hupti gently reminds you <strong>2–5 minutes before</strong> each task!
+        </p>
+
+        <!-- Task Creator Form -->
+        <form id="taskboxForm" class="task-creation-form">
+          <div class="task-form-row">
+            <input 
+              type="text" 
+              id="taskInputName" 
+              class="task-input-text" 
+              placeholder="What are you planning to do?" 
+              maxlength="70"
+              required 
+            />
+          </div>
+
+          <div class="task-time-controls-row">
+            <div class="task-time-input-group">
+              <label for="taskInputTime" class="task-time-label">Target Time:</label>
+              <input type="time" id="taskInputTime" class="task-time-picker" required />
+            </div>
+
+            <!-- Quick Add Minutes Presets -->
+            <div class="task-presets-group">
+              <span class="presets-label">Quick:</span>
+              <button type="button" class="btn-time-preset" data-mins="15" aria-label="Add 15 minutes to target time" title="Schedule in 15 minutes">+15m</button>
+              <button type="button" class="btn-time-preset" data-mins="25" aria-label="Add 25 minutes to target time" title="Schedule in 25 minutes">+25m</button>
+              <button type="button" class="btn-time-preset" data-mins="45" aria-label="Add 45 minutes to target time" title="Schedule in 45 minutes">+45m</button>
+              <button type="button" class="btn-time-preset" data-mins="60" aria-label="Add 60 minutes to target time" title="Schedule in 60 minutes">+60m</button>
+            </div>
+          </div>
+
+          <button type="submit" id="btnSaveTask" class="task-save-btn" aria-label="Save focus task to schedule" title="Save Task">
+            <span>🌸 Save Task</span>
+          </button>
+        </form>
+
+        <!-- Active Tasks Section -->
+        <div class="task-list-section">
+          <div class="task-section-header">
+            <div class="task-header-left">
+              <h3>Scheduled Tasks</h3>
+              <span id="taskPendingCountBadge" class="task-pending-pill">0 Pending</span>
+            </div>
+            <button type="button" id="btnShowAddTask" class="btn-add-task-header" aria-label="Add new focus task" title="Add new focus task">＋ Add Task</button>
+          </div>
+
+          <div id="taskListContainer" class="task-list-container">
+            <!-- Dynamic task cards inserted here -->
+          </div>
+
+          <!-- Empty State -->
+          <div id="taskEmptyState" class="task-empty-state">
+            <span class="empty-icon">🌱</span>
+            <p>No tasks scheduled right now.<br>Add one above and Hupti will give you a gentle reminder!</p>
+          </div>
+        </div>
+
+        <div class="taskbox-footer-note">
+          🔔 <em>Hupti plays a soft alert chime and posts an on-screen reminder 2–5 minutes before your task starts.</em>
+          <p class="taskbox-tab-hint" style="margin-top: 0.35rem; font-size: 0.78rem; opacity: 0.85;">💡 <em>Keep Hupti open in a tab or floating PiP window for timely reminders.</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Minimalist About Creator Modal -->
+  <div id="aboutCreatorModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="aboutCreatorTitle">
+    <div class="modal-card about-creator-card">
+      <div class="modal-header">
+        <h2 id="aboutCreatorTitle">Created by Rimon</h2>
+        <button id="btnCloseAboutCreator" class="modal-close" aria-label="Close dialog" title="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body about-creator-body">
+        <p class="about-creator-tagline">Built to make your desk cozy and productive.</p>
+        <a href="https://www.linkedin.com/in/redwanul-rimon/" target="_blank" rel="noopener noreferrer" class="creator-linkedin-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+          <span>Connect on LinkedIn</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Authentic Random-Word Typing Speed Challenge Modal -->
+  <div id="typingTestModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="typingModalTitle">
+    <div class="modal-card typing-test-card">
+      <div class="modal-header">
+        <div class="typing-header-left">
+          <span class="typing-header-icon">⌨️</span>
+          <h2 id="typingModalTitle">Typing Speed Challenge</h2>
+        </div>
+        <button id="btnCloseTypingTest" class="modal-close" aria-label="Close dialog" title="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body typing-modal-body">
+        
+        <!-- Controls row: Duration Selector & Live Timer -->
+        <div class="typing-controls-bar">
+          <div class="typing-durations" id="typingDurationGroup">
+            <span class="duration-label">Duration:</span>
+            <button type="button" class="duration-pill active" data-time="30" aria-label="30 seconds typing speed test" title="30s Test">30s</button>
+            <button type="button" class="duration-pill" data-time="60" aria-label="60 seconds typing speed test" title="60s Test">60s</button>
+          </div>
+          
+          <div class="typing-live-stats">
+            <div class="stat-pill timer-pill">
+              <span class="stat-icon">⏱️</span>
+              <span id="typingTimerDisplay" class="stat-value">30s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Words Stream Display Box -->
+        <div class="typing-words-display" id="typingWordsDisplay" tabindex="0" aria-label="Words to type">
+          <!-- Dynamic words injected here -->
+        </div>
+
+        <!-- Real-time Typing Input Box -->
+        <div class="typing-input-wrapper">
+          <input 
+            type="text" 
+            id="typingInput" 
+            class="typing-input-field" 
+            placeholder="Type here to start typing..." 
+            autocomplete="off" 
+            autocorrect="off" 
+            autocapitalize="off" 
+            spellcheck="false"
+          />
+          <button id="btnRestartTyping" class="icon-btn typing-restart-btn" aria-label="Restart typing speed challenge" title="Restart test">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Results Card (Hidden until countdown reaches 0) -->
+        <div id="typingResultsCard" class="typing-results-card" style="display: none;">
+          <div class="results-badge">🎉 Time's Up!</div>
+          <div class="results-stats-row">
+            <div class="result-stat-box">
+              <span class="result-stat-num" id="resWpm">0</span>
+              <span class="result-stat-lbl">WPM (Words / Min)</span>
+            </div>
+            <div class="result-stat-box">
+              <span class="result-stat-num" id="resAccuracy">100%</span>
+              <span class="result-stat-lbl">Accuracy</span>
+            </div>
+            <div class="result-stat-box">
+              <span class="result-stat-num" id="resChars">0 / 0</span>
+              <span class="result-stat-lbl">Chars (Correct / Errors)</span>
+            </div>
+          </div>
+          <button id="btnTryAgain" class="action-pill btn-try-again" aria-label="Try typing challenge again" title="Try Again">
+            <span>🔄 Try Again</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modular Scripts Loaded in Topological Order -->
+  <script src="js/soundfx.js?v=3.0"></script>
+  <script src="js/huptistate.js?v=3.0"></script>
+  <script src="js/huptirenderer.js?v=3.0"></script>
+  <script src="js/inputhandler.js?v=3.0"></script>
+  <script src="js/pipmanager.js?v=3.0"></script>
+  <script type="module" src="js/main.js?v=3.0"></script>
+</body>
+</html>
