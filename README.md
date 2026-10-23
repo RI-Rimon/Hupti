@@ -228,20 +228,6 @@ Accessible via ribbon button or shortcut `C` with clean 3-tab navigation:
 Try Hupti directly in your browser:  
 👉 **[https://hupti.vercel.app/](https://hupti.vercel.app/)**
 
-### 🛠️ Local Development
-To run Hupti locally:
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/RI-Rimon/Hupti.git
-   cd Hupti
-   ```
-2. Serve static files with any local HTTP server:
-   ```bash
-   npx serve
-   ```
-   *Alternatively, use Python (`python -m http.server 3000`) or the VS Code Live Server extension.*
-3. Open `http://localhost:3000` in any modern web browser.
-
 
 
 ## 👤 Credits & License
