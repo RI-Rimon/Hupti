@@ -39,7 +39,7 @@ class InputHandler {
         return;
       }
 
-      // 3. Strictly ignore if ANY modal overlay is currently open (Taskbox, Typing Test, Wardrobe, Pomodoro, Feedback, Welcome)
+      // 3. Strictly ignore if ANY modal overlay is currently open (Taskbox, Wardrobe, Pomodoro, Feedback, Welcome)
       if (document.querySelector('.modal-overlay.active')) return;
 
       // 4. Strictly ignore if user has toggled keyboard shortcuts off in settings

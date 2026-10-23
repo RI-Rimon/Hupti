@@ -122,26 +122,20 @@
           </button>
         </div>
 
-        <!-- Row 2 (Bottom): Workflow Capsules (Music, Taskbox, Typing Speed) -->
+        <!-- Row 2 (Bottom): Workflow Capsules (Music, Taskbox) -->
         <div class="header-row-bottom">
           <!-- Ambient Quick Selector -->
           <div class="ambient-quick-wrapper" title="Select ambient background music or soundscape">
             <select id="ambientQuickSelect" class="ambient-quick-select" aria-label="Quick Ambient Soundscape" title="Select ambient background music or soundscape">
               <option value="off">🎵 Music: Off</option>
-              <option value="rain">🌧️ Rain</option>
-              <option value="coffeeshop">☕ Cozy Lo-Fi</option>
-              <option value="forest">🌲 Forest Breeze</option>
-              <option value="zen">🔔 Zen Chimes</option>
-              <option value="ocean">🌊 Ocean Waves</option>
-              <option value="midnight">🌙 Midnight Beats</option>
-              <option value="hearth">🔥 Purr &amp; Hearth</option>
-              <option value="meadow">🌾 Night Meadow</option>
-              <option value="bamboo_flute">🎋 Bamboo Flute</option>
-              <option value="acoustic_guitar">🎸 Acoustic Guitar</option>
-              <option value="piano_harmonium">🎹 Piano &amp; Harmonium</option>
-              <option value="kyoto_temple">⛩️ Kyoto Temple Rain</option>
-              <option value="latenight_lofi">🎧 Late Night Beats</option>
-              <option value="nordic_brook">🏞️ Nordic Brook</option>
+              <option value="cozy_lofi">☕ Cozy Lo-Fi Study</option>
+              <option value="latenight_lofi">🎧 Late Night Chill</option>
+              <option value="soft_rain">🌧️ Soft Rain</option>
+              <option value="bamboo_flute">🎋 Peaceful Flute</option>
+              <option value="acoustic_guitar">🎸 Cozy Guitar</option>
+              <option value="piano_harmonium">🎹 Meditative Piano</option>
+              <option value="campfire">🔥 Crackling Campfire</option>
+              <option value="brown_noise">🟤 Brown Noise</option>
             </select>
           </div>
 
@@ -150,12 +144,6 @@
             <span class="taskbox-pill-icon">📝</span>
             <span class="taskbox-pill-label">Taskbox</span>
             <span id="taskboxBadge" class="taskbox-count-badge" style="display: none;">0</span>
-          </button>
-
-          <!-- ⌨️ Typing Speed Pill Button -->
-          <button id="btnTypingTestToggle" class="typing-speed-pill-btn" aria-label="Test Your Typing Speed (30s / 60s Focus Challenge)" title="Test Your Typing Speed">
-            <span class="typing-pill-icon">⌨️</span>
-            <span class="typing-pill-text">Typing Speed</span>
           </button>
         </div>
       </div>
@@ -680,162 +668,96 @@
           Organic ambient study environments generated in real-time via the <strong>Web Audio API</strong>. 100% procedural, infinite, and zero external audio files.
         </p>
 
-        <!-- Quick Ambient Modes Toggle Bar (Complete 14 Tracks) -->
+        <!-- Quick Ambient Modes Toggle Bar (Curated 8 Tracks) -->
         <div class="ambient-quick-tabs" id="ambientQuickTabs">
-          <button type="button" class="ambient-tab-btn active" data-ambient="rain" aria-label="Play Gentle Rain soundscape" title="Gentle Rain">🌧️ Rain</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="coffeeshop" aria-label="Play Cozy Lo-Fi soundscape" title="Cozy Lo-Fi">☕ Cozy Lo-Fi</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="forest" aria-label="Play Forest Night Breeze soundscape" title="Forest Breeze">🌲 Forest</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="zen" aria-label="Play Zen Meditation Chimes soundscape" title="Zen Chimes">🔔 Zen Chimes</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="ocean" aria-label="Play Gentle Ocean Waves soundscape" title="Ocean Waves">🌊 Ocean</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="midnight" aria-label="Play Midnight Study Lo-Fi soundscape" title="Midnight Lo-Fi">🌙 Midnight</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="hearth" aria-label="Play Purr and Hearth soundscape" title="Purr &amp; Hearth">🔥 Hearth</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="meadow" aria-label="Play Summer Night Meadow soundscape" title="Night Meadow">🌾 Meadow</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="bamboo_flute" aria-label="Play Morning Bamboo Flute soundscape" title="Bamboo Flute">🎋 Bamboo Flute</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="acoustic_guitar" aria-label="Play Fireside Acoustic Guitar soundscape" title="Acoustic Guitar">🎸 Acoustic Guitar</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="piano_harmonium" aria-label="Play Piano and Harmonium Bloom soundscape" title="Piano &amp; Harmonium">🎹 Piano &amp; Harmonium</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="kyoto_temple" aria-label="Play Kyoto Temple Rain soundscape" title="Kyoto Temple">⛩️ Kyoto Temple</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="latenight_lofi" aria-label="Play Late Night Beats soundscape" title="Late Night Beats">🎧 Late Night Beats</button>
-          <button type="button" class="ambient-tab-btn" data-ambient="nordic_brook" aria-label="Play Nordic Pines and Brook soundscape" title="Nordic Brook">🏞️ Nordic Brook</button>
+          <button type="button" class="ambient-tab-btn active" data-ambient="cozy_lofi" aria-label="Play Cozy Lo-Fi Study Beats" title="Cozy Lo-Fi">☕ Cozy Lo-Fi</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="latenight_lofi" aria-label="Play Late Night Lo-Fi Chill" title="Late Night Chill">🎧 Late Night Chill</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="soft_rain" aria-label="Play Soft Rain &amp; Distant Thunder" title="Soft Rain">🌧️ Soft Rain</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="bamboo_flute" aria-label="Play Peaceful Bamboo Flute" title="Bamboo Flute">🎋 Bamboo Flute</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="acoustic_guitar" aria-label="Play Cozy Fireside Acoustic Guitar" title="Acoustic Guitar">🎸 Acoustic Guitar</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="piano_harmonium" aria-label="Play Meditative Piano &amp; Harmonium" title="Piano &amp; Harmonium">🎹 Piano &amp; Harmonium</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="campfire" aria-label="Play Crackling Campfire" title="Campfire">🔥 Campfire</button>
+          <button type="button" class="ambient-tab-btn" data-ambient="brown_noise" aria-label="Play Deep Focus Brown Noise" title="Brown Noise">🟤 Brown Noise</button>
           <button type="button" class="ambient-tab-btn" data-ambient="off" aria-label="Turn off ambient soundscape" title="Music Off">🎵 Music: Off</button>
         </div>
 
         <div class="ambient-grid">
-          <!-- 1. Rain -->
-          <div class="ambient-option active" data-ambient="rain">
-            <div class="ambient-icon">🌧️</div>
-            <div class="ambient-info">
-              <h4>Gentle Rain</h4>
-              <p>Soft rainfall and delicate drops tapping against a cozy window pane.</p>
-            </div>
-            <span class="ambient-active-badge">Active</span>
-          </div>
-
-          <!-- 2. Coffee Shop Lo-Fi -->
-          <div class="ambient-option" data-ambient="coffeeshop">
+          <!-- 1. Cozy Lo-Fi Study Beats -->
+          <div class="ambient-option active" data-ambient="cozy_lofi">
             <div class="ambient-icon">☕</div>
             <div class="ambient-info">
-              <h4>Cozy Coffee Shop Lo-Fi</h4>
+              <h4>Cozy Lo-Fi Study Beats</h4>
               <p>Warm vinyl crackle, mellow electric piano chords, soft low-tempo beat.</p>
             </div>
             <span class="ambient-active-badge">Active</span>
           </div>
 
-          <!-- 3. Forest Breeze -->
-          <div class="ambient-option" data-ambient="forest">
-            <div class="ambient-icon">🌲</div>
-            <div class="ambient-info">
-              <h4>Forest Night Breeze</h4>
-              <p>Subtle nocturnal ambiance, distant wind rustle, gentle night crickets.</p>
-            </div>
-            <span class="ambient-active-badge">Active</span>
-          </div>
-
-          <!-- 4. Zen Chimes -->
-          <div class="ambient-option" data-ambient="zen">
-            <div class="ambient-icon">🔔</div>
-            <div class="ambient-info">
-              <h4>Zen Meditation Chimes</h4>
-              <p>Slow, resonant Tibetan singing-bowl chimes with smooth atmospheric drone.</p>
-            </div>
-            <span class="ambient-active-badge">Active</span>
-          </div>
-
-          <!-- 5. Gentle Ocean Waves -->
-          <div class="ambient-option" data-ambient="ocean">
-            <div class="ambient-icon">🌊</div>
-            <div class="ambient-info">
-              <h4>Gentle Ocean Waves</h4>
-              <p>Soothing, rhythmic distant sea waves breaking softly on the shore.</p>
-            </div>
-            <span class="ambient-active-badge">Active</span>
-          </div>
-
-          <!-- 6. Midnight Study Lo-Fi -->
-          <div class="ambient-option" data-ambient="midnight">
-            <div class="ambient-icon">🌙</div>
-            <div class="ambient-info">
-              <h4>Midnight Study Lo-Fi</h4>
-              <p>Mellow Rhodes keys, vinyl fuzz, and a slow, relaxing chill-hop groove.</p>
-            </div>
-            <span class="ambient-active-badge">Active</span>
-          </div>
-
-          <!-- 7. Purr & Hearth -->
-          <div class="ambient-option" data-ambient="hearth">
-            <div class="ambient-icon">🔥</div>
-            <div class="ambient-info">
-              <h4>Purr &amp; Hearth</h4>
-              <p>Soft crackling wood fire combined with a gentle, rhythmic ambient cat purr.</p>
-            </div>
-            <span class="ambient-active-badge">Active</span>
-          </div>
-
-          <!-- 8. Summer Night Meadow -->
-          <div class="ambient-option" data-ambient="meadow">
-            <div class="ambient-icon">🌾</div>
-            <div class="ambient-info">
-              <h4>Summer Night Meadow</h4>
-              <p>Warm night ambience with distant rustling leaves and gentle crickets.</p>
-            </div>
-            <span class="ambient-active-badge">Active</span>
-          </div>
-
-          <!-- 9. Peaceful Morning Bamboo Flute -->
-          <div class="ambient-option" data-ambient="bamboo_flute">
-            <div class="ambient-icon">🎋</div>
-            <div class="ambient-info">
-              <h4>Morning Bamboo Flute</h4>
-              <p>Soft, airy, and soul-touching bamboo flute melody with natural breeze (বাঁশির মিষ্টি সুর).</p>
-            </div>
-            <span class="ambient-active-badge">Active</span>
-          </div>
-
-          <!-- 10. Cozy Fireside Acoustic Guitar -->
-          <div class="ambient-option" data-ambient="acoustic_guitar">
-            <div class="ambient-icon">🎸</div>
-            <div class="ambient-info">
-              <h4>Fireside Acoustic Guitar</h4>
-              <p>Gentle, warm acoustic fingerpicked nylon/steel chords in a repetitive slow melody.</p>
-            </div>
-            <span class="ambient-active-badge">Active</span>
-          </div>
-
-          <!-- 11. Meditative Piano & Soft Harmonium Bloom -->
-          <div class="ambient-option" data-ambient="piano_harmonium">
-            <div class="ambient-icon">🎹</div>
-            <div class="ambient-info">
-              <h4>Piano &amp; Harmonium Bloom</h4>
-              <p>Minimalist acoustic piano notes blended over a warm, tranquil harmonium drone.</p>
-            </div>
-            <span class="ambient-active-badge">Active</span>
-          </div>
-
-          <!-- 12. Kyoto Temple Rain & Bamboo Bell -->
-          <div class="ambient-option" data-ambient="kyoto_temple">
-            <div class="ambient-icon">⛩️</div>
-            <div class="ambient-info">
-              <h4>Kyoto Temple Rain</h4>
-              <p>Raindrops tapping on cedar veranda tiles with subtle, resonant bamboo bells.</p>
-            </div>
-            <span class="ambient-active-badge">Active</span>
-          </div>
-
-          <!-- 13. Late Night Midnight Lo-Fi Beats -->
+          <!-- 2. Late Night Lo-Fi Chill -->
           <div class="ambient-option" data-ambient="latenight_lofi">
             <div class="ambient-icon">🎧</div>
             <div class="ambient-info">
-              <h4>Late Night Lo-Fi Beats</h4>
+              <h4>Late Night Lo-Fi Chill</h4>
               <p>Deep Rhodes chords, silky bassline, subtle vinyl scratch, and relaxing 70 BPM tempo.</p>
             </div>
             <span class="ambient-active-badge">Active</span>
           </div>
 
-          <!-- 14. Starry Nordic Pines & Flowing Brook -->
-          <div class="ambient-option" data-ambient="nordic_brook">
-            <div class="ambient-icon">🏞️</div>
+          <!-- 3. Soft Rain & Distant Thunder -->
+          <div class="ambient-option" data-ambient="soft_rain">
+            <div class="ambient-icon">🌧️</div>
             <div class="ambient-info">
-              <h4>Nordic Pines &amp; Brook</h4>
-              <p>Pristine mountain stream water splashing over stones with a nocturnal wind.</p>
+              <h4>Soft Rain &amp; Distant Thunder</h4>
+              <p>Delicate rain tapping against window panes with deep, distant rolling thunder.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 4. Peaceful Bamboo Flute -->
+          <div class="ambient-option" data-ambient="bamboo_flute">
+            <div class="ambient-icon">🎋</div>
+            <div class="ambient-info">
+              <h4>Peaceful Bamboo Flute</h4>
+              <p>Soft, airy, and soul-touching bamboo flute melody with natural morning breeze.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 5. Cozy Fireside Acoustic Guitar -->
+          <div class="ambient-option" data-ambient="acoustic_guitar">
+            <div class="ambient-icon">🎸</div>
+            <div class="ambient-info">
+              <h4>Cozy Fireside Acoustic Guitar</h4>
+              <p>Gentle, warm acoustic fingerpicked nylon chords in a repetitive slow melody.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 6. Meditative Piano & Harmonium -->
+          <div class="ambient-option" data-ambient="piano_harmonium">
+            <div class="ambient-icon">🎹</div>
+            <div class="ambient-info">
+              <h4>Meditative Piano &amp; Harmonium</h4>
+              <p>Minimalist acoustic piano notes blended over a warm, tranquil harmonium drone.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 7. Crackling Campfire -->
+          <div class="ambient-option" data-ambient="campfire">
+            <div class="ambient-icon">🔥</div>
+            <div class="ambient-info">
+              <h4>Crackling Campfire</h4>
+              <p>Warm hearth fire crackle and soft ember pops with gentle low rumble.</p>
+            </div>
+            <span class="ambient-active-badge">Active</span>
+          </div>
+
+          <!-- 8. Deep Focus Brown Noise -->
+          <div class="ambient-option" data-ambient="brown_noise">
+            <div class="ambient-icon">🟤</div>
+            <div class="ambient-info">
+              <h4>Deep Focus Brown Noise</h4>
+              <p>Smooth low-frequency noise for blocking out distractions and entering deep work.</p>
             </div>
             <span class="ambient-active-badge">Active</span>
           </div>
@@ -1107,84 +1029,6 @@
           </svg>
           <span>Connect on LinkedIn</span>
         </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- 6. Authentic Random-Word Typing Speed Challenge Modal -->
-  <div id="typingTestModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="typingModalTitle">
-    <div class="modal-card typing-test-card">
-      <div class="modal-header">
-        <div class="typing-header-left">
-          <span class="typing-header-icon">⌨️</span>
-          <h2 id="typingModalTitle">Typing Speed Challenge</h2>
-        </div>
-        <button id="btnCloseTypingTest" class="modal-close" aria-label="Close dialog" title="Close dialog">&times;</button>
-      </div>
-      <div class="modal-body typing-modal-body">
-        
-        <!-- Controls row: Duration Selector & Live Timer -->
-        <div class="typing-controls-bar">
-          <div class="typing-durations" id="typingDurationGroup">
-            <span class="duration-label">Duration:</span>
-            <button type="button" class="duration-pill active" data-time="30" aria-label="30 seconds typing speed test" title="30s Test">30s</button>
-            <button type="button" class="duration-pill" data-time="60" aria-label="60 seconds typing speed test" title="60s Test">60s</button>
-          </div>
-          
-          <div class="typing-live-stats">
-            <div class="stat-pill timer-pill">
-              <span class="stat-icon">⏱️</span>
-              <span id="typingTimerDisplay" class="stat-value">30s</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Words Stream Display Box -->
-        <div class="typing-words-display" id="typingWordsDisplay" tabindex="0" aria-label="Words to type">
-          <!-- Dynamic words injected here -->
-        </div>
-
-        <!-- Real-time Typing Input Box -->
-        <div class="typing-input-wrapper">
-          <input 
-            type="text" 
-            id="typingInput" 
-            class="typing-input-field" 
-            placeholder="Type here to start typing..." 
-            autocomplete="off" 
-            autocorrect="off" 
-            autocapitalize="off" 
-            spellcheck="false"
-          />
-          <button id="btnRestartTyping" class="icon-btn typing-restart-btn" aria-label="Restart typing speed challenge" title="Restart test">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Results Card (Hidden until countdown reaches 0) -->
-        <div id="typingResultsCard" class="typing-results-card" style="display: none;">
-          <div class="results-badge">🎉 Time's Up!</div>
-          <div class="results-stats-row">
-            <div class="result-stat-box">
-              <span class="result-stat-num" id="resWpm">0</span>
-              <span class="result-stat-lbl">WPM (Words / Min)</span>
-            </div>
-            <div class="result-stat-box">
-              <span class="result-stat-num" id="resAccuracy">100%</span>
-              <span class="result-stat-lbl">Accuracy</span>
-            </div>
-            <div class="result-stat-box">
-              <span class="result-stat-num" id="resChars">0 / 0</span>
-              <span class="result-stat-lbl">Chars (Correct / Errors)</span>
-            </div>
-          </div>
-          <button id="btnTryAgain" class="action-pill btn-try-again" aria-label="Try typing challenge again" title="Try Again">
-            <span>🔄 Try Again</span>
-          </button>
-        </div>
-
       </div>
     </div>
   </div>

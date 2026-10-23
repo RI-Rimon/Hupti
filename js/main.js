@@ -1,12 +1,11 @@
 /**
  * Main - Application Coordinator & Entry Point
- * Orchestrates modular architecture: Pet lifecycle, Modals, Taskbox, Typing Test,
+ * Orchestrates modular architecture: Pet lifecycle, Modals, Taskbox,
  * Web3Forms Feedback, Pomodoro study engine, and Ambient soundscapes.
  */
 
 import { initModals, openModal, closeModal } from './modals.js';
 import { initFeedback } from './feedback.js';
-import { initTypingTest } from './typing.js';
 import { initTaskbox } from './taskbox.js';
 import { initPet } from './pet.js';
 
@@ -28,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Initialize Subsystems
   initModals();
   initFeedback({ soundFX, huptiState });
-  initTypingTest({ soundFX });
   initTaskbox({ soundFX, huptiState });
   const petController = initPet({ huptiState, huptiRenderer, soundFX, pipManager });
 
@@ -179,9 +177,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  let prevSessionsCompleted = huptiState.getStateSnapshot().pomodoro?.sessionsCompleted || 0;
+
   huptiState.subscribe((state) => {
     if (state.pomodoro) {
       updatePomodoroUI(state.pomodoro);
+
+      // Trigger celebratory animation (blush + hearts burst) when focus session completes
+      if (state.pomodoro.sessionsCompleted > prevSessionsCompleted) {
+        prevSessionsCompleted = state.pomodoro.sessionsCompleted;
+        if (huptiRenderer && typeof huptiRenderer.triggerBlush === 'function') {
+          huptiRenderer.triggerBlush(4000);
+        }
+        if (huptiRenderer && typeof huptiRenderer.spawnHeartsBurst === 'function') {
+          huptiRenderer.spawnHeartsBurst(8);
+        }
+      } else {
+        prevSessionsCompleted = state.pomodoro.sessionsCompleted;
+      }
     }
   });
 
@@ -260,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const ambientQuickSelect = document.getElementById('ambientQuickSelect');
   const ambientTabBtns = document.querySelectorAll('.ambient-tab-btn');
 
-  let selectedAmbientType = 'rain';
+  let selectedAmbientType = 'cozy_lofi';
 
   const updateAmbientPlayBtnUI = () => {
     const isPlaying = soundFX.isAmbientPlaying();

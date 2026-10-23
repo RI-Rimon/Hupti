@@ -524,9 +524,9 @@ class HuptiState {
     this.pomodoroInterval = setInterval(() => this._onPomodoroTick(), 1000);
 
     const focusLines = [
-      "Focus time started! Let's conquer this together. I'm right here studying beside you!",
-      "Study mode activated! 💡 Let's give our full attention for the next interval.",
-      "Timer running! Deep breath in... you're capable of incredible things!"
+      "Focusing with you... Let's stay in the zone~ 💡",
+      "Focusing with you... You've got this! 🌸",
+      "Focusing with you... Quiet study mode active ✨"
     ];
     const line = focusLines[Math.floor(Math.random() * focusLines.length)];
     this.setMood(MOODS.HAPPY, 4500, line);
@@ -605,9 +605,9 @@ class HuptiState {
       this.customization.glasses = false;
 
       this.setMood(
-        MOODS.HUGGED,
+        MOODS.HAPPY,
         6000,
-        "Focus session complete! 🎉 Put your pen down, take a sip of water, and stretch your arms!"
+        "Great focus session! Time for a short break~"
       );
     } else {
       // Completed Break Session!
